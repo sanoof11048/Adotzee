@@ -20,10 +20,42 @@ export default function Contact() {
         .required('Message is required')
         .min(10, 'Message must be at least 10 characters'),
     }),
-    onSubmit: (values, { resetForm }) => {
-      console.log('Form data:', values);
-      alert('Message sent successfully!');
-      resetForm();
+    onSubmit: async (values, { resetForm }) => {
+      const formDataSend = new FormData();
+
+      formDataSend.append('name', values.name);
+      formDataSend.append('email', values.email);
+      formDataSend.append('message', values.message);
+
+      try {
+        const response = await fetch(
+          'https://script.google.com/macros/s/AKfycbwIrf3Z1oLRjVwSQPyXRuYC52T5kp3sRo6IuDMw20C64boxhDxvRNANoQWgX6V3zxpz/exec',
+          {
+            method: 'POST',
+            body: formDataSend,
+          }
+        );
+
+        if (response.ok) {
+          Swal.fire({
+            title: "Success!",
+            text: "Form submitted successfully",
+            icon: "success",
+            confirmButtonText: "OK",
+            timer: 2000,
+          });
+        } else {
+          throw new Error('Failed to submit form');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+          title: "Oops!",
+          text: "Something went wrong while submitting the form. Please try again later.",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
     },
   });
 
@@ -45,13 +77,21 @@ export default function Contact() {
           />
         </div>
 
-        <form onSubmit={formik.handleSubmit} className="w-full md:w-1/2 flex flex-col space-y-4 p-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault(); // Prevent default form submission
+            formik.handleSubmit();
+          }}
+          className="w-full md:w-1/2 flex flex-col space-y-4 p-4"
+        >
           <div>
             <input
               type="text"
               name="name"
               placeholder="Your name here"
-              className={`p-3 rounded-lg border ${formik.touched.name && formik.errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-500 w-full`}
+              className={`p-3 rounded-lg border ${
+                formik.touched.name && formik.errors.name ? 'border-red-500' : 'border-gray-300'
+              } focus:outline-none focus:ring focus:ring-blue-500 w-full`}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.name}
@@ -66,7 +106,9 @@ export default function Contact() {
               type="email"
               name="email"
               placeholder="Your email here"
-              className={`p-3 rounded-lg border ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-500 w-full`}
+              className={`p-3 rounded-lg border ${
+                formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'
+              } focus:outline-none focus:ring focus:ring-blue-500 w-full`}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}
@@ -80,7 +122,9 @@ export default function Contact() {
             <textarea
               name="message"
               placeholder="Your message here"
-              className={`p-3 rounded-lg border ${formik.touched.message && formik.errors.message ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-500 h-32 w-full`}
+              className={`p-3 rounded-lg border ${
+                formik.touched.message && formik.errors.message ? 'border-red-500' : 'border-gray-300'
+              } focus:outline-none focus:ring focus:ring-blue-500 h-32 w-full`}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.message}

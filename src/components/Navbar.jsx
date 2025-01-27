@@ -12,7 +12,7 @@ function Navbar() {
     <div>
       <header
         id="navbar"
-        className="bg-white flex justify-between items-center sticky top-0 z-50 shadow-lg"
+        className="bg-light flex justify-between items-center sticky top-0 z-50 shadow-lg"
       >
         {/* Logo Section */}
         <div className="flex items-center ps-5 pt-1">

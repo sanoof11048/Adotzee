@@ -7,6 +7,7 @@ export default defineConfig({
     //   secondary: '#9333ea', // Purple
       light: '#e5e7eb', // Light gray
       logo: '#052949',
+      good:'#23a8f2'
     },
     fontFamily: {
       serif: ['Georgia', 'serif'], // For Georgia Bold
