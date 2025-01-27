@@ -11,7 +11,6 @@ function Intro() {
   const [fade, setFade] = useState(true);
 
   useEffect(() => {
-    console.log(10+3+'')
     const interval = setInterval(() => {
       setFade(false);
       setTimeout(() => {
@@ -35,11 +34,13 @@ function Intro() {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
-        />
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+          </div>
       ))}
 
-      {/* Mobile background image */}
-      <div className={`lg:hidden relative top-0 left-0 w-full transition-opacity duration-1000 ease-in-out ${fade ? 'opacity-100' : 'opacity-0'}`}
+      {/* Mobile background image only for first section */}
+      <div className={`lg:hidden relative top-0 left-0 w-full h-full transition-opacity duration-1000 ease-in-out ${currentImage === 0 ? 'opacity-100' : 'opacity-0'}`}
         style={{
           backgroundImage: `url(${images[currentImage]})`,
           backgroundSize: 'cover',
@@ -66,7 +67,7 @@ function Intro() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 z-10">
+      <section id="services" className="relative grid grid-cols-1 md:grid-cols-3 gap-6 p-6 z-10">
         {['Science', 'Commerce', 'Humanities'].map((title) => (
           <div key={title} className="p-6 bg-primary text-white rounded-lg shadow-lg hover:shadow-xl">
             <h3 className="text-xl font-bold mb-2">{title}</h3>

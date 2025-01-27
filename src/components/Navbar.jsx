@@ -25,7 +25,6 @@ function Navbar() {
           <img src={logo} className="w-22 h-22 -m-5 md:hidden"/>
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           onClick={toggleMenu}
           className="md:hidden text-gray-700 focus:outline-none"
@@ -46,7 +45,6 @@ function Navbar() {
           </svg>
         </button>
 
-        {/* Desktop Menu */}
         <nav className="hidden md:flex space-x-8 me-10">
           <a href="#home" className="text-gray-700 hover:text-gray-900">
             Home
