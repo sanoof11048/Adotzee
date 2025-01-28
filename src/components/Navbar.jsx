@@ -46,7 +46,7 @@ function Navbar() {
         </button>
 
         <nav className="hidden md:flex space-x-8 me-10">
-          <a href="#home" className="text-gray-700 hover:text-gray-900">
+          <a className="text-gray-700 hover:text-gray-900">
             Home
           </a>
           <a href="#about" className="text-gray-700 hover:text-gray-900">
