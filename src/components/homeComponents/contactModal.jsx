@@ -11,7 +11,6 @@ const AdmissionModal = ({ isOpen, closeModal }) => {
   useEffect(() => {
     if (isOpen) {
       setStudentData({
-        id: "",
         name: "",
         phone: "",
         stream: "",
@@ -48,6 +47,14 @@ const AdmissionModal = ({ isOpen, closeModal }) => {
       confirmButtonText: "Yes, Submit",
     }).then((result) => {
       if (result.isConfirmed) {
+         Swal.fire({
+                  title: "Loading...",
+                  text: "Please wait while we fetch the data.",
+                  allowOutsideClick: false,
+                  didOpen: () => {
+                    Swal.showLoading(); 
+                  },
+                });
         const formDataSend = new FormData();
         
         Object.entries(studentData).forEach(([key, value]) => {
