@@ -2,37 +2,141 @@ import { useState } from "react";
 
 const commerceCourses = [
   {
-    category: "BCom",
-    addons: [
-      { name: "BCom Accounting", colleges: ["ABC Commerce College", "XYZ Business School"] },
-      { name: "BCom Marketing", colleges: ["Global Business Academy", "City Commerce College"] },
-      { name: "BCom Banking & Insurance", colleges: ["Banking Institute", "Finance & Insurance College"] },
-      { name: "BCom Taxation", colleges: ["Tax Experts Academy", "Revenue Studies University"] },
-      { name: "BCom E-Commerce", colleges: ["Digital Trade Institute", "E-Business University"] },
-      { name: "BCom Business Analytics", colleges: ["Data Insights College", "Analytics & Commerce Institute"] },
-      { name: "BCom Investment Management", colleges: ["Investment Academy", "Capital Markets University"] },
-      { name: "BCom Financial Planning", colleges: ["Wealth Management College", "Future Finance University"] },
-    ],
-  },
-  {
     category: "BBA",
     addons: [
-      { name: "BBA Finance", colleges: ["LMN Management Institute", "OPQ University"] },
-      { name: "BBA Marketing", colleges: ["Business Hub College", "Corporate Academy"] },
-      { name: "BBA HR", colleges: ["HR Excellence College", "People Management University"] },
-      { name: "BBA International Business", colleges: ["Global Trade Academy", "International Business School"] },
-      { name: "BBA Supply Chain Management", colleges: ["Logistics Academy", "Supply Chain University"] },
-      { name: "BBA Entrepreneurship", colleges: ["Startup University", "Business Founders Institute"] },
-    ],
-  },
-  {
-    category: "BCA",
-    addons: [
-      { name: "BCA AI & ML", colleges: ["Global IT Academy", "Tech Innovators University"] },
-      { name: "BCA Cloud Computing", colleges: ["Cloud Academy", "Futuristic University"] },
-      { name: "BCA Cyber Security", colleges: ["CyberTech Institute", "SecureNet University"] },
-      { name: "BCA Data Science", colleges: ["Data Analytics Academy", "Smart Data University"] },
-      { name: "BCA Software Development", colleges: ["Code Masters Institute", "Innovative Software Academy"] },
+      {
+        name: "BBA",
+        colleges: [
+          "ACHARYA COLLEGE BANGALORE",
+          "SRINIVAS UNIVERSITY MANGALORE",
+          "BRINDAVAN COLLEGE BANGALORE",
+          "CMR COLLEGE BANGALORE",
+          "SEA COLLEGE BANGALORE",
+          "KRUPANIDHI COLLEGE BANGALORE",
+          "PRESIDENCY UNIVERSITY BANGALORE",
+          "S-VYASA BANGALORE",
+          "HKBK COLLEGE BANGALORE",
+          "RR COLLEGE BANGALORE",
+        ],
+      },
+      {
+        name: "BBA + LOGISTICS",
+        colleges: ["PRESIDENCY UNIVERSITY BANGALORE"],
+      },
+      {
+        name: "BBA + BUSINESS ANALYST",
+        colleges: [
+          "PRESIDENCY UNIVERSITY BANGALORE",
+          "BRINDAVAN COLLEGE BANGALORE",
+          "CMR UNIVERSITY BANGALORE",
+          "ACHARYA COLLEGE BANGALORE",
+        ],
+      },
+      {
+        name: "BBA + HOSPITAL ADMINISTRATION",
+        colleges: ["SRINIVAS COLLEGE MANGALORE", "BRINDAVAN COLLEGE BANGALORE"],
+      },
+      {
+        name: "BBA + SPORTS MANAGEMENT",
+        colleges: ["S-VYASA COLLEGE BANGALORE"],
+      },
+      {
+        name: "BBA + DIGITAL MARKETING",
+        colleges: [
+          "CMR COLLEGE BANGALORE",
+          "PRESIDENCY UNIVERSITY BANGALORE",
+          "ACHARYA COLLEGE BANGALORE",
+        ],
+      },
+      {
+        name: "BBA + HOSPITAL ADMINISTRATION WITH MINOR IN MEDICAL TOURISM",
+        colleges: [
+          "YENEPOYA UNIVERSITY MANGALORE",
+          "YENEPOYA UNIVERSITY BANGALORE",
+        ],
+      },
+      {
+        name: "BBA + LOGISTICS AND DIGITAL MARKETING",
+        colleges: ["BRINDAVAN COLLEGE BANGALORE"],
+      },
+      {
+        name: "BBA + LOGISTICS AND AVIATION",
+        colleges: [
+          "YENEPOYA COLLEGE BANGALORE",
+          "BRINDAVAN COLLEGE BANGALORE",
+          "YENEPOYA COLLEGE MANGALORE",
+        ],
+      },
+      {
+        name: "BBA + HR",
+        colleges: ["PRESIDENCY UNIVERSITY BANGALORE"],
+      },
+      {
+        name: "BBA + AVIATION",
+        colleges: [
+          "KRUPANIDHI COLLEGE BANGALORE",
+          "PRESIDENCY UNIVERSITY BANGALORE",
+          "SRINIVAS UNIVERSITY MANGALORE",
+          "ACHARYA COLLEGE BANGALORE",
+          "EAST WEST COLLEGE BANGALORE",
+          "IZEE BUSINESS SCHOOL BANGALORE",
+          "BRINDAVAN COLLEGE BANGALORE",
+          "RR COLLEGE BANGALORE",
+        ],
+      },
+      {
+        name: "BBA + AVIATION AND LOGISTICS",
+        colleges: [
+          "KRUPANIDHI COLLEGE BANGALORE",
+          "S-VYASA COLLEGE BANGALORE",
+          "SRINIVAS COLLEGE MANGALORE",
+          "BRINDAVAN COLLEGE BANGALORE",
+        ],
+      },
+      {
+        name: "BBA + LOGISTICS, SUPPLY CHAIN MANAGEMENT AND PORT MANAGEMENT",
+        colleges: [
+          "YENEPOYA UNIVERSITY BANGALORE",
+          "YENEPOYA UNIVERSITY MANGALORE",
+          "S-VYASA COLLEGE BANGALORE",
+        ],
+      },
+      {
+        name: "BBA + BUSINESS MANAGEMENT, DIGITAL MARKETING AND BUSINESS ANALYTICS",
+        colleges: [
+          "S-VYASA COLLEGE BANGALORE",
+          "KRUPANIDHI COLLEGE BANGALORE",
+          "YENEPOYA COLLEGE MANGALORE",
+        ],
+      },
+      {
+        name: "BBA + ENTREPRENEURSHIP, INNOVATION AND BUSINESS ANALYTICS",
+        colleges: [
+          "S-VYASA COLLEGE BANGALORE",
+          "YENEPOYA UNIVERSITY MANGALORE",
+          "YENEPOYA UNIVERSITY BANGALORE",
+        ],
+      },
+      {
+        name: "BBA + PORT AND SHIPPING MANAGEMENT INCLUDE LOGISTICS",
+        colleges: ["SRINIVAS COLLEGE MANGALORE"],
+      },
+      {
+        name: "BBA + STARTUP, ENTREPRENEURSHIP & FINTECH (WITH INTERNATIONAL BUSINESS & BUSINESS ANALYTICS)",
+        colleges: ["SRINIVAS COLLEGE MANGALORE"],
+      },
+      {
+        name: "BBA + ENTREPRENEURSHIP, DEVELOPMENT AND SMALL BUSINESS MANAGEMENT",
+        colleges: ["KRUPANIDHI COLLEGE BANGALORE"],
+      },
+      {
+        name: "BBA + AVIATION IN LOGISTICS & SUPPLY CHAIN MANAGEMENT",
+        colleges: ["IZEE BUSINESS SCHOOL BANGALORE"],
+      },
+      {
+        name: "BBA + AVIATION IN LOGISTICS & SUPPLY CHAIN MANAGEMENT GLOBAL",
+        colleges: ["IZEE BUSINESS SCHOOL BANGALORE"],
+      },
     ],
   },
 ];
@@ -58,9 +162,15 @@ export default function Commerce() {
               setSelectedAddon("");
             }}
           >
-            <option value="" disabled>Select Category</option>
+            <option value="" disabled>
+              Select Course
+            </option>
             {commerceCourses.map((course, index) => (
-              <option key={index} value={course.category} className="text-black">
+              <option
+                key={index}
+                value={course.category}
+                className="text-black"
+              >
                 {course.category}
               </option>
             ))}
@@ -72,11 +182,17 @@ export default function Commerce() {
               value={selectedAddon}
               onChange={(e) => setSelectedAddon(e.target.value)}
             >
-              <option value="" disabled>Select Specialization</option>
+              <option value="" disabled>
+                Select Specialization
+              </option>
               {commerceCourses
                 .find((course) => course.category === selectedCategory)
                 ?.addons.map((addon, index) => (
-                  <option key={index} value={addon.name} className="text-black">
+                  <option
+                    key={index}
+                    value={addon.name}
+                    className="text-black text-xs"
+                  >
                     {addon.name}
                   </option>
                 ))}
@@ -86,21 +202,35 @@ export default function Commerce() {
 
         {/* College Cards */}
         {selectedAddon && (
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-            {commerceCourses
-              .find((course) => course.category === selectedCategory)
-              ?.addons.find((addon) => addon.name === selectedAddon)
-              ?.colleges.map((college, index) => (
-                <div
-                  key={index}
-                  className="p-6 rounded-xl shadow-xl bg-white/30 backdrop-blur-md text-white text-center transition-transform hover:scale-105 hover:shadow-2xl"
-                >
-                  <div className="w-16 h-16 bg-blue-600 text-white flex items-center justify-center rounded-full mb-4 text-3xl font-bold shadow-lg">
-                    📊
+          <div className="mt-8 w-full">
+            <h2 className="text-3xl font-bold text-white text-center mb-6">
+              Colleges Offering Your Course
+            </h2>
+            <div className="flex flex-col gap-6 w-full">
+              {commerceCourses
+                .find((course) => course.category === selectedCategory)
+                ?.addons.find((addon) => addon.name === selectedAddon)
+                ?.colleges.map((college, index) => (
+                  <div
+                    key={index}
+                    className="p-4 rounded-xl shadow-lg bg-white/20 backdrop-blur-md text-white transition-transform hover:scale-101 hover:shadow-2xl flex flex-col md:flex-row items-center justify-between border border-white/30"
+                  >
+                    <h2 className="text-2xl font-semibold w-full text-center md:text-left">
+                      {college}
+                    </h2>
+                    <a
+                      href={`https://wa.me/918281060462?text=${encodeURIComponent(
+                        `I need to Know about ${selectedAddon} in ${college}`
+                      )}`}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      className="md:mt-0 text-sm text-white bg-blue-600 px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition"
+                    >
+                      Fees Details & More Info
+                    </a>
                   </div>
-                  <h2 className="text-xl font-semibold">{college}</h2>
-                </div>
-              ))}
+                ))}
+            </div>
           </div>
         )}
       </div>

@@ -82,7 +82,7 @@ export default function Humanities() {
               {humanitiesCourses
                 .find((course) => course.category === selectedCategory)
                 ?.addons.map((addon, index) => (
-                  <option key={index} value={addon.name} className="text-black">
+                  <option  key={index} value={addon.name} className="text-black ">
                     {addon.name}
                   </option>
                 ))}
