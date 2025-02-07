@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import hat from "../assets/hat.png";
 import text from "../assets/textlogo.png";
-import logo from '../assets/logo-removebg.png'
+import logo from "../assets/logo-removebg.png";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,93 +10,89 @@ function Navbar() {
 
   return (
     <div>
-      <header
-        id="navbar"
-        className="bg-light flex justify-between items-center sticky top-0 z-50 shadow-lg"
-      >
+      <header id="navbar" className="bg-gray-400 flex justify-between items-center shadow-lg px-5 py-0">
         {/* Logo Section */}
-        <div className="flex items-center ps-5 pt-1">
+        <div className="flex items-center">
           <img src={hat} alt="Logo" className="w-18 h-18 -m-2 hidden md:block" />
-          <img
-            src={text}
-            alt="Logo Text"
-            className="h-9 ml-[-16px] mt-1 object-contain  hidden md:block"
-          />
-          <img src={logo} className="w-22 h-22 -m-5 md:hidden"/>
+          <img src={text} alt="Logo Text" className="h-9 ml-[-16px] mt-1 object-contain hidden md:block" />
+          <img src={logo} className="w-22 h-22 -m-5 md:hidden" />
         </div>
 
-        <button
-          onClick={toggleMenu}
-          className="md:hidden text-gray-700 focus:outline-none"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
+        {/* Menu Toggle Button (Mobile) */}
+        <button onClick={toggleMenu} className="md:hidden text-gray-700 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
 
-        <nav className="hidden md:flex space-x-8 me-10">
-          <a className="text-gray-700 hover:text-gray-900">
-            Home
-          </a>
-          <a href="#about" className="text-gray-700 hover:text-gray-900">
-            About
-          </a>
-          <a href="#services" className="text-gray-700 hover:text-gray-900">
-            Services
-          </a>
-          <a href="#contact" className="text-gray-700 hover:text-gray-900">
-            Contact
-          </a>
-        </nav>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex space-x-8 me-20">
+  {["About", "Admission", "Enquire"].map((item) => (
+    <a 
+      key={item} 
+      href={`#${item.toLowerCase()}`} 
+      className="text-gray-50 hover:text-gray-900 relative 
+                after:content-[''] after:absolute after:left-0 after:-bottom-1 
+                after:w-0 after:h-[3px] after:bg-primary
+                after:transition-all after:duration-300 hover:after:w-full"
+    >
+      {item}
+    </a>
+  ))}
+</nav>
+
       </header>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="lg:hidden absolute top-14 left-0 w-full bg-blue-3 bg-opacity-50  text-white shadow-lg z-40">
-          <div className="flex flex-col">
+      {/* Mobile Menu with UnoCSS Animation */}
+      <div
+        className={`fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300 ${
+          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+      ></div>
+
+      <div
+        className={`fixed top-0 right-0 h-full w-2/5 bg-gray-900 text-white shadow-lg z-50 transition-transform duration-500 ease-in-out ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex flex-col p-6 space-y-4">
+          <button onClick={() => setIsMenuOpen(false)} className="self-end text-white text-xs">
+            ✖
+          </button>
+
+          {/* Navigation Links */}
+          {["Home", "About", "Services", "Contact"].map((item) => (
             <a
-              href="#home"
-              className="block py-4 px-6 hover:bg-gray-700"
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              className="block py-4 px-6 hover:bg-gray-700 transition"
               onClick={() => setIsMenuOpen(false)}
             >
-              Home
+              {item}
             </a>
-            <a
-              href="#about"
-              className="block py-4 px-6 hover:bg-gray-700"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </a>
-            <a
-              href="#services"
-              className="block py-4 px-6 hover:bg-gray-700"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Services
-            </a>
-            <a
-              href="#contact"
-              className="block py-4 px-6 hover:bg-gray-700"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contact
-            </a>
+          ))}
+
+          {/* Social Icons */}
+          <div className="flex fixed bottom-10 left-1/2 transform -translate-x-1/2 space-x-4 w-full justify-center items-center">
+            {[
+              { href: "https://www.facebook.com", icon: "fab fa-facebook" },
+              { href: "https://www.instagram.com", icon: "fab fa-instagram" },
+              { href: "https://wa.me/918281060462?text=Hello!", icon: "fab fa-whatsapp" },
+            ].map((social, index) => (
+              <a
+                key={index}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex bg-blue-600 w-12 h-12 rounded-full items-center justify-center text-white shadow-md hover:bg-blue-700 transition"
+              >
+                <i className={`${social.icon} text-2xl p-2`}></i>
+              </a>
+            ))}
           </div>
         </div>
-      )}
-      
+      </div>
     </div>
   );
 }

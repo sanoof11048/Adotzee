@@ -55,38 +55,41 @@ function Intro() {
           <p className="text-lg text-gray-300">
             Embark on your academic journey with tailored services across disciplines.
           </p>
+          <h3 className="text-4xl font-bold">Select Your Previous Stream in Here!</h3>
         </section>
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       </div>
 
       {/* Intro Section */}
-      <section id="intro" className="relative text-center py-16 text-white z-10 lg:block hidden">
+      <section id="intro" className="relative text-center pt-16 text-white z-10 lg:block hidden">
         <h2 className="text-4xl font-bold mb-4">
           'Adotzee: A Journey of Colorful Connections!'
         </h2>
         <p className="text-lg text-gray-300">
           Embark on your academic journey with tailored services across disciplines.
         </p>
+          <h3 className="text-2xl font-bold">Select Your Stream  <span>
+          <i class="fa-solid fa-arrow-down-long animate-bounce"></i>
+          </span></h3>
       </section>
 
       {/* Services Section */}
       <section id="services" className="relative grid grid-cols-1 md:grid-cols-3 gap-6 p-6 z-10 lg:mx-36">
        
-        <div onClick={()=>navigate('/science')}  className="p-6 inset-0 bg-good bg-opacity-90 text-white rounded-lg shadow-lg hover:shadow-xl">
+        <div onClick={()=>navigate('/science')}  className="p-6  inset-0 bg-good bg-opacity-90 text-white rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition duration-800 cursor-pointer">
             <h3 className="text-xl font-bold mb-2">Science</h3>
             <p>"Discover boundless opportunities in science with expert guidance for your academic and career growth."</p>
             <a className="text-secondary mt-4 block ">
               Services 
             </a>
           </div>
-          <div onClick={()=>navigate('/commerce')} className="p-6 inset-0 bg-lightblue bg-opacity-80 text-white rounded-lg shadow-lg hover:shadow-xl">
+          <div onClick={()=>navigate('/commerce')} className="p-6 inset-0 bg-lightblue bg-opacity-80 text-white rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition duration-800 cursor-pointer">
             <h3 className="text-xl font-bold mb-2">Commerce</h3>
             <p>"Unlock your potential in commerce with personalized support for academic success and future endeavors."</p>
             <a  className="text-secondary mt-4 block">
               Services 
             </a>
           </div>
-          <div onClick={()=>navigate('/humanities')} className="p-6 inset-0 bg-good bg-opacity-90 text-white rounded-lg shadow-lg hover:shadow-xl">
+          <div onClick={()=>navigate('/humanities')} className="p-6 inset-0 bg-good bg-opacity-90 text-white rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition duration-800 cursor-pointer">
             <h3 className="text-xl font-bold mb-2">Humanities</h3>
             <p>"Explore diverse humanities pathways with expert guidance tailored to your educational and career aspirations."</p>
             <a className="text-secondary mt-4 block text-white">

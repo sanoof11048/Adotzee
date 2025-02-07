@@ -11,11 +11,7 @@ function Home() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [openContact,setOpenContact]=useState(false)
-  const [showSocialIcons, setShowSocialIcons] = useState(false);
 
-  const toggleSocialIcons = () => {
-    setShowSocialIcons(!showSocialIcons);
-  };
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -27,61 +23,7 @@ function Home() {
       <Services />
       <Contact />
       <div>
-<div>
 
-      {/* Other content */}
-
-      {/* Arrow Button to Toggle Social Media Icons */}
-      <a
-        onClick={toggleSocialIcons}
-        className="z-50 fixed top-20 right-1 bg-secondary text-white shadow-lg hover:shadow-xl transition duration-300 sm:hidden"
-      >
-        <i className="fa-solid fa-square-caret-left text-white text-2xl"></i>
-      </a>
-
-      {/* Social Media Icons */}
-      {showSocialIcons && (
-        <div
-          className="flex flex-row items-end fixed bottom-20 right-4 space-x-3 opacity-100 mt-4 transition-all duration-500 ease-in-out transform sm:hidden"
-        >
-          <a
-            href="https://www.facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center content-center mb-2 bg-blue-600 rounded-full p-2 shadow-md hover:bg-blue-700 transition-all duration-800 overflow-hidden w-8 h-8 hover:w-28"
-          >
-            <i className="fab fa-facebook text-white text-2xl ml-1.5"></i>
-            <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-              Connect
-            </span>
-          </a>
-
-          <a
-            href="https://www.instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center bg-blue-500 mb-2 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-800 overflow-hidden w-8 h-8 hover:w-28"
-          >
-            <i className="fab fa-instagram text-white text-2xl ml-1.5"></i>
-            <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-              Connect
-            </span>
-          </a>
-
-          <a
-            href="https://wa.me/918281060462?text=Hello!"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center bg-green-600 mb-2 rounded-full p-2 shadow-md hover:bg-green-700 transition-all duration-800 overflow-hidden w-8 h-8 hover:w-28"
-          >
-            <i className="fab fa-whatsapp text-white text-2xl ml-1.5"></i>
-            <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-              Connect
-            </span>
-          </a>
-        </div>
-      )}
-</div>
 
         {openContact&&(
 
@@ -114,7 +56,7 @@ function Home() {
         onClick={() => setIsModalOpen(true)}
         onMouseEnter={()=>setOpenContact(true)}
        
-        className="z-50 animate-bounce fixed bottom-4 right-4 bg-secondary text-white p-3 rounded-full shadow-lg hover:shadow-xl transition duration-300"
+        className="z-49 animate-bounce fixed bottom-4 right-4 bg-secondary text-white p-3 rounded-full shadow-lg hover:shadow-xl transition duration-300"
       >
         <i className="fa-solid fa-message text-white text-2xl"></i>
         

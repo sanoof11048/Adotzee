@@ -2,85 +2,114 @@ import { useState } from "react";
 
 const humanitiesCourses = [
   {
-    name: "BA History",
-    details: [
-      { college: "ABC Arts College", fee: "₹35,000 per year" },
-      { college: "XYZ University", fee: "₹40,000 per year" },
+    category: "BA English",
+    addons: [
+      { name: "BA English (Hons)", colleges: ["Literature Institute", "Creative Writing University"] },
+      { name: "BA English Literature", colleges: ["Classic Literature Academy", "Modern English University"] },
+      { name: "BA Linguistics", colleges: ["Language Studies Institute", "Linguistics Research University"] },
     ],
   },
   {
-    name: "BA English Literature",
-    details: [
-      { college: "LMN Language Institute", fee: "₹42,000 per year" },
-      { college: "OPQ University", fee: "₹38,000 per year" },
+    category: "BA History",
+    addons: [
+      { name: "BA History (Hons)", colleges: ["Ancient History Institute", "World History University"] },
+      { name: "BA Archaeology", colleges: ["Archaeological Research Academy", "Heritage Studies University"] },
+      { name: "BA Art History", colleges: ["Art History Institute", "Cultural Studies University"] },
     ],
   },
   {
-    name: "BA Political Science",
-    details: [
-      { college: "National College", fee: "₹37,000 per year" },
-      { college: "City Arts College", fee: "₹39,000 per year" },
+    category: "BA Psychology",
+    addons: [
+      { name: "BA Psychology (Hons)", colleges: ["Behavioral Sciences Institute", "Cognitive Psychology University"] },
+      { name: "BA Clinical Psychology", colleges: ["Mental Health Academy", "Therapeutic Studies University"] },
+      { name: "BA Counseling Psychology", colleges: ["Counseling Institute", "Human Behavior University"] },
     ],
   },
   {
-    name: "BA Sociology",
-    details: [
-      { college: "Social Sciences Academy", fee: "₹36,000 per year" },
-      { college: "Global University", fee: "₹41,000 per year" },
+    category: "BA Sociology",
+    addons: [
+      { name: "BA Sociology (Hons)", colleges: ["Social Sciences Institute", "Sociology Research University"] },
+      { name: "BA Anthropology", colleges: ["Cultural Anthropology Academy", "Human Studies University"] },
+      { name: "BA Social Work", colleges: ["Community Development Institute", "Social Welfare University"] },
     ],
   },
   {
-    name: "BA Philosophy",
-    details: [
-      { college: "Wisdom College", fee: "₹34,000 per year" },
-      { college: "Metaphysics Institute", fee: "₹39,500 per year" },
+    category: "BA Political Science",
+    addons: [
+      { name: "BA Political Science (Hons)", colleges: ["Political Theory Institute", "Global Politics University"] },
+      { name: "BA International Relations", colleges: ["Diplomacy Academy", "Global Affairs University"] },
+      { name: "BA Public Administration", colleges: ["Governance Institute", "Public Policy University"] },
     ],
   },
-  {
-    name: "BA Psychology",
-    details: [
-      { college: "Mind Academy", fee: "₹45,000 per year" },
-      { college: "Behavioral Sciences University", fee: "₹50,000 per year" },
-    ],
-  },
-  {
-    name: "BA Economics",
-    details: [
-      { college: "Finance & Economics Institute", fee: "₹42,000 per year" },
-      { college: "Commerce & Humanities College", fee: "₹44,000 per year" },
-    ],
-  }
 ];
 
-export default function HumanitiesCourses() {
-  const [selectedCourse, setSelectedCourse] = useState(null);
+export default function Humanities() {
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedAddon, setSelectedAddon] = useState("");
 
   return (
-    <div className="p-6 font-sans max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">Humanities Degree Courses</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {humanitiesCourses.map((course, index) => (
-          <div
-            key={index}
-            className="border rounded-lg p-6 shadow-lg bg-white text-center hover:bg-blue-100 transition-all cursor-pointer"
-            onClick={() => setSelectedCourse(course)}
+    <div className="flex flex-col items-center min-h-screen min-w-screen p-8 bg-[#052949] w-full">
+      <div className="bg-white/20 backdrop-blur-lg p-10 rounded-2xl shadow-lg w-full max-w-5xl">
+        <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
+          📚 Humanities Degree Courses
+        </h1>
+
+        {/* Dropdowns */}
+        <div className="flex flex-col md:flex-row gap-6">
+          <select
+            className="w-full p-3 border border-white rounded-lg shadow-md bg-white/30 text-white text-lg focus:outline-none focus:ring-2 focus:ring-white"
+            value={selectedCategory}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setSelectedAddon("");
+            }}
           >
-            <h2 className="text-lg font-semibold text-gray-800">{course.name}</h2>
-          </div>
-        ))}
-      </div>
-      {selectedCourse && (
-        <div className="mt-8 p-6 border rounded-lg bg-gray-50 shadow-md">
-          <h2 className="text-xl font-semibold text-blue-700">{selectedCourse.name}</h2>
-          <ul className="mt-4 space-y-3">
-            {selectedCourse.details.map((detail, idx) => (
-              <li key={idx} className="p-3 border rounded-md bg-white shadow-sm">
-                <strong>{detail.college}</strong> - {detail.fee}
-              </li>
+            <option value="" disabled>Select Category</option>
+            {humanitiesCourses.map((course, index) => (
+              <option key={index} value={course.category} className="text-black">
+                {course.category}
+              </option>
             ))}
-          </ul>
+          </select>
+
+          {selectedCategory && (
+            <select
+              className="w-full p-3 border border-white rounded-lg shadow-md bg-white/30 text-white text-lg focus:outline-none focus:ring-2 focus:ring-white"
+              value={selectedAddon}
+              onChange={(e) => setSelectedAddon(e.target.value)}
+            >
+              <option value="" disabled>Select Specialization</option>
+              {humanitiesCourses
+                .find((course) => course.category === selectedCategory)
+                ?.addons.map((addon, index) => (
+                  <option key={index} value={addon.name} className="text-black">
+                    {addon.name}
+                  </option>
+                ))}
+            </select>
+          )}
         </div>
-      )}
+
+        {/* College Cards */}
+        {selectedAddon && (
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            {humanitiesCourses
+              .find((course) => course.category === selectedCategory)
+              ?.addons.find((addon) => addon.name === selectedAddon)
+              ?.colleges.map((college, index) => (
+                <div
+                  key={index}
+                  className="p-6 rounded-xl shadow-xl bg-white/30 backdrop-blur-md text-white text-center transition-transform hover:scale-105 hover:shadow-2xl"
+                >
+                  <div className="w-16 h-16 bg-blue-600 text-white flex items-center justify-center rounded-full mb-4 text-3xl font-bold shadow-lg">
+                    📖
+                  </div>
+                  <h2 className="text-xl font-semibold">{college}</h2>
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
