@@ -7,7 +7,7 @@ function Services() {
     return (
       <div
       onClick={()=>navigate('/')}
-      className="p-6 bg-blue-500 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+      className="p-6 bg-blue-500 text-white rounded-xl hover:scale-95 duration-700 transition shadow-md hover:shadow-lg ">
         <h3 className="text-2xl font-semibold mb-2">{title}</h3>
         <p className="text-lg">{description}</p>
       </div>

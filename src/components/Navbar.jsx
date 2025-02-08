@@ -9,8 +9,8 @@ function Navbar() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div>
-      <header id="navbar" className="bg-gray-400 flex justify-between items-center shadow-lg px-5 py-0">
+    <div className="fixed w-full z-50">
+      <header id="navbar" className="bg-gray-400 bg-opacity-75 flex justify-between items-center shadow-lg px-5 py-0">
         {/* Logo Section */}
         <div className="flex items-center">
           <img src={hat} alt="Logo" className="w-18 h-18 -m-2 hidden md:block" />
@@ -19,11 +19,12 @@ function Navbar() {
         </div>
 
         {/* Menu Toggle Button (Mobile) */}
-        <button onClick={toggleMenu} className="md:hidden text-gray-700 focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+        {/* <button onClick={toggleMenu} className="md:hidden p-1 text-gray-700 focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button> */}
+    <a onClick={toggleMenu}  className="cursor-pointer md:hidden p-1 text-gray-700 focus:outline-none "><i className="fa-solid fa-ellipsis-vertical"></i></a>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8 me-20">
@@ -78,7 +79,7 @@ function Navbar() {
             {[
               { href: "https://www.facebook.com", icon: "fab fa-facebook" },
               { href: "https://www.instagram.com", icon: "fab fa-instagram" },
-              { href: "https://wa.me/918281060462?text=Hello!", icon: "fab fa-whatsapp" },
+              { href: "https://wa.me/918281060462?text=Hello I need Admission!", icon: "fab fa-whatsapp" },
             ].map((social, index) => (
               <a
                 key={index}
