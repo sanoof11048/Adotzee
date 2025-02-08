@@ -19,7 +19,7 @@ function Intro() {
   }, []);
 
   return (
-    <section className="relative w-full flex items-center justify-center text-gray-800 text-center bg-gray-100 overflow-hidden py-20 ">
+    <section className="relative w-full flex items-center justify-center min-h-screen text-gray-800 text-center bg-gray-100 overflow-hidden pt-15 pb-10 ">
       {/* Particles Limited to the Intro Section */}
       <div className="absolute top-0 left-0 w-full h-full z-5 pointer-events-none">
         <ParticlesBackground />
@@ -34,27 +34,30 @@ function Intro() {
           Join a network of degree students guiding new learners in securing admissions for
           <span className="text-blue-500"> Science, Humanities, and Commerce</span>.
         </p>
-        <p className="text-sm sm:text-md md:text-lg text-gray-500 mb-6">
-          Get expert insights, explore career paths, and connect with like-minded peers for a brighter academic future.
+        <p className="text-md sm:text-lg md:text-xl text-gray-500 mb-6">
+Choose the Stream for Future <span className="animate-bounce motion-safe:animate-bounce">↓</span>
+
+
+
         </p>
 
         {/* Call-to-Action Buttons */}
         <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
           <button
             onClick={() => navigate("/science")}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 sm:px-6 sm:py-3 rounded-full font-semibold shadow-md transition duration-300 w-full sm:w-auto"
+            className="bg-blue-7 hover:bg-blue-500 hover:text-gray-2 text-white px-5 py-3 sm:px-6 sm:py-3 rounded-full font-semibold  shadow-md transition duration-300 w-full sm:w-auto"
           >
             Do Degree in Science
           </button>
           <button
             onClick={() => navigate("/commerce")}
-            className="bg-green-500 hover:bg-green-600 text-white px-5 py-3 sm:px-6 sm:py-3 rounded-full font-semibold shadow-md transition duration-300 w-full sm:w-auto"
+            className="bg-primary hover:bg-blue-700 hover:text-gray-2 text-white px-5 py-3 sm:px-6 sm:py-3 rounded-full font-semibold shadow-md transition duration-300 w-full sm:w-auto"
           >
             Do Degree in Commerce
           </button>
           <button
             onClick={() => navigate("/humanities")}
-            className="bg-red-500 hover:bg-red-600 text-white px-5 py-3 sm:px-6 sm:py-3 rounded-full font-semibold shadow-md transition duration-300 w-full sm:w-auto"
+            className="bg-blue-7 hover:bg-blue-500 hover:text-gray-2 text-white px-5 py-3 sm:px-6 sm:py-3 rounded-full font-semibold shadow-md transition duration-300 w-full sm:w-auto"
           >
             Do Degree in Humanities
           </button>

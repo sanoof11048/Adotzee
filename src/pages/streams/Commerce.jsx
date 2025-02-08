@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "../../components/Navbar";
 
 const commerceCourses = [
   {
@@ -138,7 +139,16 @@ const commerceCourses = [
         colleges: ["IZEE BUSINESS SCHOOL BANGALORE"],
       },
     ],
-  },
+  },{
+    category:"BCA",
+    addons:[
+      {
+        name: "BCA + AI",
+        colleges: ["PRESIDENCY UNIVERSITY BANGALORE"],
+      },
+
+    ]
+  }
 ];
 
 export default function Commerce() {
@@ -146,14 +156,18 @@ export default function Commerce() {
   const [selectedAddon, setSelectedAddon] = useState("");
 
   return (
-    <div className="flex flex-col items-center min-h-screen min-w-screen p-8 bg-[#052949] w-full">
-      <div className="bg-white/20 backdrop-blur-lg p-10 rounded-2xl shadow-lg w-full max-w-5xl">
+    <>
+    <Navbar/>
+    <div className="flex flex-col items-center justify-center min-h-screen min-w-screen bg-[#052949] w-full">
+   <h1 className="mt-30 text-white">Browrse Your Career</h1>
+      
+      <div className="bg-white/20 backdrop-blur-lg p-10 rounded-2xl shadow-lg w-fit m-20 max-w-5xl">
         <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
           💼 Commerce Degree Courses
         </h1>
 
         {/* Dropdowns */}
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6 ">
           <select
             className="w-full p-3 border border-white rounded-lg shadow-md bg-white/30 text-white text-lg focus:outline-none focus:ring-2 focus:ring-white"
             value={selectedCategory}
@@ -235,5 +249,6 @@ export default function Commerce() {
         )}
       </div>
     </div>
+    </>
   );
 }

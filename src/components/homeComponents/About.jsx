@@ -7,7 +7,7 @@ function About() {
       <section id="about" className="p-8  md:p-16 flex flex-col md:flex-row items-center gap-8">
         <div className="text-center md:flex md:text-left md:m-10 gap-7">
           <div className="">
-            <div className="min-h-auto border-e-3 border-0 border-e-lightblue border-solid border-y-0 h-auto">
+            <div className="min-h-auto md:border-e-3 md:border-0 md:border-e-lightblue md:border-solid md:border-y-0 h-auto">
               <h1 className="text-5xl font-bold pe-8 md:text-right">
                 <span className="text-primary">Our</span> story
               </h1>

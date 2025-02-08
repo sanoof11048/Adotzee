@@ -10,11 +10,22 @@ function Navbar() {
 
   return (
     <div className="fixed w-full z-50">
-      <header id="navbar" className="bg-gray-400 bg-opacity-75 flex justify-between items-center shadow-lg px-5 py-0">
+      <header
+        id="navbar"
+        className="bg-gray-400 bg-opacity-75 flex justify-between items-center shadow-lg px-5 py-0"
+      >
         {/* Logo Section */}
         <div className="flex items-center">
-          <img src={hat} alt="Logo" className="w-18 h-18 -m-2 hidden md:block" />
-          <img src={text} alt="Logo Text" className="h-9 ml-[-16px] mt-1 object-contain hidden md:block" />
+          <img
+            src={hat}
+            alt="Logo"
+            className="w-18 h-18 -m-2 hidden md:block"
+          />
+          <img
+            src={text}
+            alt="Logo Text"
+            className="h-9 ml-[-16px] mt-1 object-contain hidden md:block"
+          />
           <img src={logo} className="w-22 h-22 -m-5 md:hidden" />
         </div>
 
@@ -24,24 +35,28 @@ function Navbar() {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button> */}
-    <a onClick={toggleMenu}  className="cursor-pointer md:hidden p-1 text-gray-700 focus:outline-none "><i className="fa-solid fa-ellipsis-vertical"></i></a>
+        <a
+          onClick={toggleMenu}
+          className="cursor-pointer md:hidden p-1 text-gray-700 focus:outline-none "
+        >
+          <i className="fa-solid fa-ellipsis-vertical"></i>
+        </a>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8 me-20">
-  {["About", "Admission", "Enquire"].map((item) => (
-    <a 
-      key={item} 
-      href={`#${item.toLowerCase()}`} 
-      className="text-gray-50 hover:text-gray-900 relative 
+          {["About", "Admission", "Enquire"].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              className="text-gray-50 hover:text-gray-900 relative 
                 after:content-[''] after:absolute after:left-0 after:-bottom-1 
                 after:w-0 after:h-[3px] after:bg-primary
                 after:transition-all after:duration-300 hover:after:w-full"
-    >
-      {item}
-    </a>
-  ))}
-</nav>
-
+            >
+              {item}
+            </a>
+          ))}
+        </nav>
       </header>
 
       {/* Mobile Menu with UnoCSS Animation */}
@@ -58,7 +73,10 @@ function Navbar() {
         }`}
       >
         <div className="flex flex-col p-6 space-y-4">
-          <button onClick={() => setIsMenuOpen(false)} className="self-end text-white text-xs">
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="self-end text-white text-xs"
+          >
             ✖
           </button>
 
@@ -79,7 +97,10 @@ function Navbar() {
             {[
               { href: "https://www.facebook.com", icon: "fab fa-facebook" },
               { href: "https://www.instagram.com", icon: "fab fa-instagram" },
-              { href: "https://wa.me/918281060462?text=Hello I need Admission!", icon: "fab fa-whatsapp" },
+              {
+                href: "https://wa.me/918281060462?text=Hello I need Admission!",
+                icon: "fab fa-whatsapp",
+              },
             ].map((social, index) => (
               <a
                 key={index}
