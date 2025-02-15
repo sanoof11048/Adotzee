@@ -29,12 +29,7 @@ function Navbar() {
           <img src={logo} className="w-22 h-22 -m-5 md:hidden" />
         </div>
 
-        {/* Menu Toggle Button (Mobile) */}
-        {/* <button onClick={toggleMenu} className="md:hidden p-1 text-gray-700 focus:outline-none">
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button> */}
+    
         <a
           onClick={toggleMenu}
           className="cursor-pointer md:hidden p-1 text-gray-700 focus:outline-none "
@@ -44,10 +39,10 @@ function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8 me-20">
-          {["About", "Admission", "Enquire"].map((item) => (
+          {["About", "Admission", "Contact"].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase()}`}
+              href={`/#${item.toLowerCase()}`}
               className="text-gray-50 hover:text-gray-900 relative 
                 after:content-[''] after:absolute after:left-0 after:-bottom-1 
                 after:w-0 after:h-[3px] after:bg-primary
@@ -84,8 +79,8 @@ function Navbar() {
           {["Home", "About", "Services", "Contact"].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase()}`}
-              className="block py-4 px-6 hover:bg-gray-700 transition"
+              href={`/`}
+              className="block py-4 px-6 hover:bg-gray-700 text-white transition"
               onClick={() => setIsMenuOpen(false)}
             >
               {item}
@@ -93,12 +88,12 @@ function Navbar() {
           ))}
 
           {/* Social Icons */}
-          <div className="flex fixed bottom-10 left-1/2 transform -translate-x-1/2 space-x-4 w-full justify-center items-center">
+          <div className="flex fixed bottom-10 left-1/2 transform -translate-x-1/2 space-x-4 justify-center items-center">
             {[
-              { href: "https://www.facebook.com", icon: "fab fa-facebook" },
-              { href: "https://www.instagram.com", icon: "fab fa-instagram" },
+              { href:"https://www.facebook.com/share/1WeqyuRjTd/?mibextid=wwXIfr", icon: "fab fa-facebook" },
+              {   href:"https://www.instagram.com/adotzee.inn", icon: "fab fa-instagram" },
               {
-                href: "https://wa.me/918281060462?text=Hello I need Admission!",
+                href: "https://wa.me/918281060462?text=Hello I need Admission for Degree!, Can you Guide me",
                 icon: "fab fa-whatsapp",
               },
             ].map((social, index) => (
@@ -107,7 +102,7 @@ function Navbar() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex bg-blue-600 w-12 h-12 rounded-full items-center justify-center text-white shadow-md hover:bg-blue-700 transition"
+                className="group flex bg-blue-600 w-10 h-10 rounded-full items-center justify-center text-white shadow-md hover:bg-blue-700 transition"
               >
                 <i className={`${social.icon} text-2xl p-2`}></i>
               </a>

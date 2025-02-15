@@ -47,20 +47,20 @@ const AdmissionModal = ({ isOpen, closeModal }) => {
       confirmButtonText: "Yes, Submit",
     }).then((result) => {
       if (result.isConfirmed) {
-         Swal.fire({
-                  title: "Loading...",
-                  text: "Please wait while we fetch the data.",
-                  allowOutsideClick: false,
-                  didOpen: () => {
-                    Swal.showLoading(); 
-                  },
-                });
+        Swal.fire({
+          title: "Loading...",
+          text: "Please wait while we fetch the data.",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         const formDataSend = new FormData();
-        
+
         Object.entries(studentData).forEach(([key, value]) => {
           formDataSend.append(key, value);
         });
-        
+
         fetch(
           "https://script.google.com/macros/s/AKfycbxsdxL0fooufrcqwW5VEGSAgVWtYexmV-CoUguotifyETrOZJbU6j4HQ7C8HOjF6Gs/exec",
 
@@ -94,7 +94,6 @@ const AdmissionModal = ({ isOpen, closeModal }) => {
       }
     });
   };
-  
 
   if (!isOpen) return null;
 
@@ -107,9 +106,7 @@ const AdmissionModal = ({ isOpen, closeModal }) => {
         className="bg-white p-6 rounded-lg max-w-xl w-full shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Enquiry Form
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Enquiry Form</h2>
 
         <div className="space-y-3">
           {/* Student Name */}
@@ -174,10 +171,11 @@ const AdmissionModal = ({ isOpen, closeModal }) => {
                 }
               >
                 <option value="">Select Course</option>
-                {course.map((item,index) => (
-                  <option key={index} value={item}>{item}</option>
+                {course.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
                 ))}
-
               </select>
             </div>
           )}

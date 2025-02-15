@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AdmissionModal from "./contactModal";
 
 function Services() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   function ServiceCard({ title, description }) {
-    const navigate= useNavigate()
     return (
       <div
-      onClick={()=>navigate('/')}
-      className="p-6 bg-blue-500 text-white rounded-xl hover:scale-95 duration-700 transition shadow-md hover:shadow-lg ">
+        onClick={() => {
+          setIsModalOpen(true);
+        }}
+        className="cursor-pointer p-6 bg-blue-500 text-white rounded-xl hover:scale-95 duration-700 transition shadow-md hover:shadow-lg "
+      >
         <h3 className="text-2xl font-semibold mb-2">{title}</h3>
         <p className="text-lg">{description}</p>
       </div>
@@ -19,7 +27,9 @@ function Services() {
         id="services"
         className="bg-blue-100 text-white py-16 px-8 flex flex-col items-center"
       >
-        <h2 className="text-4xl text-gray-700 ___ font-bold mb-2">Our Services</h2>
+        <h2 className="text-4xl text-gray-700 ___ font-bold mb-2">
+          Our Services
+        </h2>
         <p className="text-lg mb-8 text-gray-500">
           Tailored services to enhance your admission experience.
         </p>
@@ -47,6 +57,7 @@ function Services() {
             description="Help in identifying and applying for scholarships."
           />
         </div>
+        <AdmissionModal isOpen={isModalOpen} closeModal={closeModal} />
       </section>
     </>
   );
