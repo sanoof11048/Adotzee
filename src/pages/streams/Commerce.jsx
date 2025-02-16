@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../components/Navbar";
 import { useCourse } from "../../components/Context/courseData";
 
@@ -8,6 +10,15 @@ export default function Commerce() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { commerceCourses } = useCourse();
 
+  // Simulating student count
+  const [studentCount, setStudentCount] = useState(89);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStudentCount((prev) => prev + Math.floor(Math.random() * 5));
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
   const selectedColleges =
     commerceCourses
       .find((course) => course.category === selectedCategory)
@@ -16,21 +27,27 @@ export default function Commerce() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-center min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-full px-5">
-        <h1 className="mt-10 text-white text-4xl font-extrabold text-center">🚀 Find Your Path in Commerce</h1>
-
+      <div className="flex flex-col items-center md:pt-15 justify-center min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-full px-5">
+        <h1 className="mt-10 text-white text-4xl font-extrabold text-center">
+          🚀 Find Your Path in Commerce
+        </h1>
+        
+        <p className="text-white text-lg mt-3">🎓 Over <span className="text-yellow-400 font-bold">{studentCount}</span> students have started their careers with us!</p>
+        
         <div className="bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-full max-w-5xl mt-10">
           <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
             💼 Commerce Degree Courses
           </h1>
-
+          
+          <p className="text-center text-white text-lg mb-5">📢 **Limited Seats Available – Secure Your Admission Today!**</p>
+          
           {/* Category List */}
           <div className="flex flex-col gap-6 w-full">
             {commerceCourses.map((course, index) => (
               <div key={index} className="w-full">
                 <div
-                  className={`cursor-pointer p-4 border border-white/40 rounded-lg shadow-md text-lg text-center font-semibold 
-                  transition-all duration-300 ease-in-out flex items-center justify-center gap-3
+                  className={`cursor-pointer p-4 border border-white/40 rounded-lg shadow-md text-lg font-semibold 
+                  transition-all duration-300 ease-in-out flex items-center justify-between gap-3
                   ${
                     selectedCategory === course.category
                       ? "bg-white text-black font-bold"
@@ -44,6 +61,10 @@ export default function Commerce() {
                   }}
                 >
                   📚 {course.category}
+                  <FontAwesomeIcon 
+                    icon={selectedCategory === course.category ? faChevronUp : faChevronDown} 
+                    className="transition-transform duration-300" 
+                  />
                 </div>
 
                 {/* Show Addon Courses Under Selected Category */}
@@ -112,6 +133,21 @@ export default function Commerce() {
           </div>
         </div>
       )}
+
+      {/* Contact Section */}
+      <div className="fixed bottom-5 right-5">
+        <a
+          href="https://wa.me/918281060462?text=I%20want%20admission%20assistance"
+          rel="noopener noreferrer"
+          target="_blank"
+          className="group flex items-center bg-blue-500 rounded-full shadow-xl hover:bg-green-600 transition-all duration-800 overflow-hidden w-12 h-12 hover:w-48"
+        >
+          <span className="text-xl ms-2.5">📞</span>
+          <span className="ml-2 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-100">
+            Talk to an Expert
+          </span>
+        </a>
+      </div>
     </>
   );
 }

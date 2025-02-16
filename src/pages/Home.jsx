@@ -53,9 +53,7 @@ function Home() {
             </a>
 
             <a
-              href={`https://wa.me/918281060462?text=${encodeURIComponent(
-                "Hello! I Need Admission"
-              )}`}
+              href="https://wa.me/918281060462?text=I%20want%20admission%20assistance"
               rel="noopener noreferrer"
               target="_blank"
               className="group decoration-none flex items-center bg-blue-600 mb-2 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-800 overflow-hidden w-8 h-8 hover:w-28"
