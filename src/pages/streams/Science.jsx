@@ -16,11 +16,11 @@ export default function Science() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-fit pt-10">
-        <h1 className="mt-10 text-white text-4xl font-extrabold text-center">🔬 Explore Science Degrees</h1>
+      <div className="flex flex-col items-center min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-full pt-10">
+      <h1 className="mt-10 text-white text-4xl font-extrabold text-center">🔬 Explore Science Degrees</h1>
 
-        <div className="mx-auto bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-fit  md:min-w-5xl mt-10 mx-8">
-          <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
+        <div className="mx-4 sm:mx-10 md:mx-40 bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-fit md:min-w-5xl mt-10">
+        <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
             🧪 Science Degree Courses
           </h1>
 

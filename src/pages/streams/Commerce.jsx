@@ -27,14 +27,14 @@ export default function Commerce() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-fit pt-10">
+      <div className="flex flex-col items-center min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-full pt-10">
         <h1 className="pt-10 mt-0 text-white text-4xl font-extrabold text-center">
           🚀 Find Your Path in Commerce
         </h1>
         
         <p className="text-white text-lg mt-3">🎓 Over <span className="text-yellow-400 font-bold">{studentCount}</span> students have started their careers with us!</p>
         
-        <div className="mx-auto bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-fit  md:min-w-5xl mt-10 mx-8">
+        <div className="mx-4 sm:mx-10 md:mx-40 bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-fit md:min-w-5xl mt-10">
           <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
             💼 Commerce Degree Courses
           </h1>
