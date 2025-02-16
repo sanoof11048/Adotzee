@@ -28,11 +28,11 @@ export default function Commerce() {
     <>
       <Navbar />
       <div className="flex flex-col items-center min-h-screen min-w-screen bg-gradient-to-br from-[#6a85b6] to-[#bac8e0] w-full pt-10">
-        <h1 className="pt-10 md:pt15 mt-0 text-white text-4xl font-extrabold text-center">
+        <h1 className="pt-10 md:pt15 mt-0 text-white text-2xl md:text-4xl  font-extrabold text-center">
           🚀 Find Your Path in Commerce
         </h1>
 
-        <p className="text-white text-lg mt-3">
+        <p className="text-white text-lg  p-3">
           🎓 Over{" "}
           <span className="text-yellow-400 font-bold">{studentCount}</span>{" "}
           students have started their careers with us!
@@ -156,16 +156,16 @@ export default function Commerce() {
 
       {/* Modal for College List */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-md">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-            <h2 className="text-2xl font-bold text-[#041C32] mb-4 text-center">
+        <div onClick={() => setIsModalOpen(false)} className="fixed inset-0 z-50  flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-md">
+          <div onClick={(e) => e.stopPropagation()} className="bg-white p-6 rounded-lg m-1 shadow-xl w-96 md:w-[75%]">
+            <h2 className="text-2xl font-bold text-[#041C32] mb-6 text-center">
               🏛️ Colleges Offering {selectedAddon}
             </h2>
-            <ul>
+            <ul className="p-0 m-0">
               {selectedColleges.map((college, index) => (
                 <li
                   key={index}
-                  className="p-2 border-b last:border-none text-[#041C32] flex justify-between items-center"
+                  className="p-2 border-b text-left text-sm last:border-none text-[#041C32] flex justify-between items-center"
                 >
                   🎓 {college}
                   <a
@@ -174,9 +174,9 @@ export default function Commerce() {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:underline"
+                    className="md:text-sm text-xs text-blue-600 whitespace-nowrap hover:underline text-right"
                   >
-                    📩 More Info
+                    📩 Fees & details
                   </a>
                 </li>
               ))}
@@ -199,7 +199,7 @@ export default function Commerce() {
           target="_blank"
           className="group flex items-center bg-blue-500 rounded-full shadow-xl hover:bg-green-600 transition-all duration-500 overflow-hidden w-12 h-12 hover:w-48"
         >
-          <span className="text-xl ms-2.5">📞</span>
+          <span className="text-xl ms-3">📞</span>
           <span className="ml-2 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
             Talk to an Expert
           </span>

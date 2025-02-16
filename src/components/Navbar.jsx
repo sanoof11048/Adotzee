@@ -9,7 +9,7 @@ function Navbar() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className="fixed w-full top-0 z-50">
+    <div className="fixed w-full top-0 z-49">
       <header
         id="navbar"
         className="bg-gray-400 bg-opacity-75 flex justify-between items-center shadow-lg px-5 py-0"

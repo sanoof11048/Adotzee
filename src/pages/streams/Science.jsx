@@ -94,7 +94,7 @@ export default function Science() {
 
       {/* Modal for College List */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-md">
           <div className="bg-white p-6 rounded-lg shadow-xl w-96">
             <h2 className="text-2xl font-bold text-[#041C32] mb-4 text-center">
               🏛️ Colleges Offering {selectedAddon}
