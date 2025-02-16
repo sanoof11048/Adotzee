@@ -27,14 +27,14 @@ export default function Commerce() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center md:pt-15 justify-center min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-full px-5">
-        <h1 className="mt-10 text-white text-4xl font-extrabold text-center">
+      <div className="flex flex-col min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-fit pt-10">
+        <h1 className="pt-10 mt-0 text-white text-4xl font-extrabold text-center">
           🚀 Find Your Path in Commerce
         </h1>
         
         <p className="text-white text-lg mt-3">🎓 Over <span className="text-yellow-400 font-bold">{studentCount}</span> students have started their careers with us!</p>
         
-        <div className="bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-full max-w-5xl mt-10">
+        <div className="mx-auto bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-fit  md:min-w-5xl mt-10 mx-8">
           <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
             💼 Commerce Degree Courses
           </h1>
@@ -42,9 +42,9 @@ export default function Commerce() {
           <p className="text-center text-white text-lg mb-5">📢 **Limited Seats Available – Secure Your Admission Today!**</p>
           
           {/* Category List */}
-          <div className="flex flex-col gap-6 w-full">
+          <div className="flex flex-col gap-6  ">
             {commerceCourses.map((course, index) => (
-              <div key={index} className="w-full">
+              <div key={index} className="w-full ">
                 <div
                   className={`cursor-pointer p-4 border border-white/40 rounded-lg shadow-md text-lg font-semibold 
                   transition-all duration-300 ease-in-out flex items-center justify-between gap-3
@@ -95,9 +95,8 @@ export default function Commerce() {
             ))}
           </div>
         </div>
-        <div className="w-full max-w-4xl mt-10 text-center text-gray-400">
+        <div className="w-full flex flex-col justify-center items-center  mt-30 text-center text-gray-400">
         <p>&copy; All Rights Reserved. ADOTZEE</p>
-      </div>
 
       <div className="flex space-x-3 mt-4 mb-10 ">
         <a
@@ -131,12 +130,13 @@ export default function Commerce() {
           rel="noopener noreferrer"
           target="_blank"
           className="group decoration-none flex items-center bg-blue-600 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
-        >
+          >
           <i className="fa-brands fa-whatsapp text-white text-2xl ml-1.5"></i>
           <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
             Connect
           </span>
         </a>
+          </div>
       </div>
       </div>
 
@@ -171,7 +171,7 @@ export default function Commerce() {
               onClick={() => setIsModalOpen(false)}
               className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-all"
             >
-              ❌ Close
+              Check Another Course
             </button>
           </div>
         </div>

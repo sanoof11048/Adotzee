@@ -59,6 +59,17 @@ function Services() {
         </div>
         <AdmissionModal isOpen={isModalOpen} closeModal={closeModal} />
       </section>
+      <div className="flex flex-col items-start bg-blue-600 text-white p-10 text-center max-w-screen">
+      <h2 className="text-2xl font-bold">Not sure what you need to apply?</h2>
+      <p className="mt-2 text-lg md:text-left">
+        Just get in touch to talk through your options with one of our friendly
+        education advisors.
+      </p>
+      <button className="mt-4 bg-primary hover:bg-white hover:text-primary text-white font-semibold py-2 px-4 rounded mx-auto md:mx-0 block">
+  Get in touch
+</button>
+
+    </div>
     </>
   );
 }

@@ -9,7 +9,7 @@ function Navbar() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className="fixed w-full z-50">
+    <div className="fixed w-full top-0 z-50">
       <header
         id="navbar"
         className="bg-gray-400 bg-opacity-75 flex justify-between items-center shadow-lg px-5 py-0"
@@ -79,7 +79,7 @@ function Navbar() {
           {["Home", "About", "Services", "Contact"].map((item) => (
             <a
               key={item}
-              href={`/`}
+              href={`/#${item.toLowerCase()}`}
               className="block py-4 px-6 hover:bg-gray-700 text-white transition"
               onClick={() => setIsMenuOpen(false)}
             >

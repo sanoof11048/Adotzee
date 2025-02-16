@@ -6,7 +6,7 @@ function Intro() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative w-full flex items-center justify-center min-h-screen text-gray-800 text-center bg-gray-100 overflow-hidden md:pt-13 md:pb-10 pt-3 pb-3 ">
+    <section id="home" className="relative w-full flex items-center justify-center min-h-screen text-gray-800 text-center bg-gray-100 overflow-hidden md:pt-13 md:pb-10 pt-3 pb-3 ">
       {/* Particles Limited to the Intro Section */}
       <div className="absolute top-0 left-0 w-full h-full z-5 pointer-events-none">
         <ParticlesBackground />
