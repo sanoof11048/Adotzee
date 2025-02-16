@@ -6,14 +6,14 @@ function Intro() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative w-full flex items-center justify-center min-h-screen text-gray-800 text-center bg-gray-100 overflow-hidden md:pt-15 md:pb-10 pt-3 pb-3 ">
+    <section className="relative w-full flex items-center justify-center min-h-screen text-gray-800 text-center bg-gray-100 overflow-hidden md:pt-13 md:pb-10 pt-3 pb-3 ">
       {/* Particles Limited to the Intro Section */}
       <div className="absolute top-0 left-0 w-full h-full z-5 pointer-events-none">
         <ParticlesBackground />
       </div>
 
       {/* Content Box */}
-      <div className="w-full mt-10 max-w-4xl bg-white shadow-xl mx-10 rounded-3xl p-6 sm:p-8 md:p-10 relative z-10">
+      <div className="w-full md:mt-10 max-w-4xl bg-white shadow-xl mx-10 rounded-3xl p-6 sm:p-8 md:p-10 relative z-10">
         <h1 className="text-2xl sm:text-2xl md:text-5xl font-extrabold leading-tight mb-4">
           Are You Looking{" "}
           <span className="text-blue-600">for College Admission</span>
