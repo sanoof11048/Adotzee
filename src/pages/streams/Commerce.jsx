@@ -27,20 +27,26 @@ export default function Commerce() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-full pt-10">
-        <h1 className="pt-10 mt-0 text-white text-4xl font-extrabold text-center">
+      <div className="flex flex-col items-center min-h-screen min-w-screen bg-gradient-to-br from-[#6a85b6] to-[#bac8e0] w-full pt-10">
+        <h1 className="pt-10 md:pt15 mt-0 text-white text-4xl font-extrabold text-center">
           🚀 Find Your Path in Commerce
         </h1>
-        
-        <p className="text-white text-lg mt-3">🎓 Over <span className="text-yellow-400 font-bold">{studentCount}</span> students have started their careers with us!</p>
-        
-        <div className="mx-4 sm:mx-10 md:mx-40 bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-fit md:min-w-5xl mt-10">
+
+        <p className="text-white text-lg mt-3">
+          🎓 Over{" "}
+          <span className="text-yellow-400 font-bold">{studentCount}</span>{" "}
+          students have started their careers with us!
+        </p>
+
+        <div className="mx-4 sm:mx-10 md:mx-40 bg-primary/50 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-fit md:min-w-5xl mt-10">
           <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
             💼 Commerce Degree Courses
           </h1>
-          
-          <p className="text-center text-white text-lg mb-5">📢 **Limited Seats Available – Secure Your Admission Today!**</p>
-          
+
+          <p className="text-center text-white text-lg mb-5">
+            📢 **Limited Seats Available – Secure Your Admission Today!**
+          </p>
+
           {/* Category List */}
           <div className="flex flex-col gap-6  ">
             {commerceCourses.map((course, index) => (
@@ -61,9 +67,13 @@ export default function Commerce() {
                   }}
                 >
                   📚 {course.category}
-                  <FontAwesomeIcon 
-                    icon={selectedCategory === course.category ? faChevronUp : faChevronDown} 
-                    className="transition-transform duration-300" 
+                  <FontAwesomeIcon
+                    icon={
+                      selectedCategory === course.category
+                        ? faChevronUp
+                        : faChevronDown
+                    }
+                    className="transition-transform duration-300"
                   />
                 </div>
 
@@ -73,7 +83,7 @@ export default function Commerce() {
                     <h3 className="text-white text-lg font-semibold text-center mb-2">
                       🎯 Click an Addon Course to See Colleges
                     </h3>
-                    <ul className="list-none flex flex-col gap-3">
+                    <ul className="list-none flex flex-col gap-3 m-0 p-0">
                       {course.addons.map((addon, idx) => (
                         <li
                           key={idx}
@@ -84,8 +94,12 @@ export default function Commerce() {
                             setIsModalOpen(true);
                           }}
                         >
-                          <span className="text-lg font-medium">📖 {addon.name}</span>
-                          <span className="text-sm text-white/80">🔍 Click for Colleges</span>
+                          <span className="md:text-lg text-size-sm font-medium text-left">
+                            📖 {addon.name}
+                          </span>
+                          <span className="text-sm text-white/80 text-right">
+                            🔍 Click for Colleges
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -95,49 +109,49 @@ export default function Commerce() {
             ))}
           </div>
         </div>
-        <div className="w-full flex flex-col justify-center items-center  mt-30 text-center text-gray-400">
-        <p>&copy; All Rights Reserved. ADOTZEE</p>
+        <div className="w-full flex flex-col justify-center items-center  mt-30 text-center text-gray-800">
+          <p>&copy; All Rights Reserved. ADOTZEE</p>
 
-      <div className="flex space-x-3 mt-4 mb-10 ">
-        <a
-          href="https://www.facebook.com/share/1WeqyuRjTd/?mibextid=wwXIfr"
-          rel="noopener noreferrer"
-          target="_blank"
-          className="group flex decoration-none  bg-blue-600 rounded-full p-2 items-center  shadow-md hover:bg-blue-700 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
-        >
-          <i className="fab fa-facebook text-white text-2xl ml-1.5"></i>
-          <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-            Connect
-          </span>
-        </a>
+          <div className="flex space-x-3  mb-10 ">
+            <a
+              href="https://www.facebook.com/share/1WeqyuRjTd/?mibextid=wwXIfr"
+              rel="noopener noreferrer"
+              target="_blank"
+              className="group flex decoration-none  bg-blue-600 rounded-full p-2 items-center  shadow-md hover:bg-blue-700 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
+            >
+              <i className="fab fa-facebook text-white text-2xl ml-1.5"></i>
+              <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                Connect
+              </span>
+            </a>
 
-        <a
-          rel="noopener noreferrer"
-          href="https://www.instagram.com/adotzee.inn"
-          target="_blank"
-          className="group flex items-center decoration-none bg-blue-500 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
-        >
-          <i className="fab fa-instagram text-white text-2xl ml-1.5"></i>
-          <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-            Connect
-          </span>
-        </a>
+            <a
+              rel="noopener noreferrer"
+              href="https://www.instagram.com/adotzee.inn"
+              target="_blank"
+              className="group flex items-center decoration-none bg-blue-500 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
+            >
+              <i className="fab fa-instagram text-white text-2xl ml-1.5"></i>
+              <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                Connect
+              </span>
+            </a>
 
-        <a
-          href={`https://wa.me/918281060462?text=${encodeURIComponent(
-            "Hello! I Need Admission"
-          )}`}
-          rel="noopener noreferrer"
-          target="_blank"
-          className="group decoration-none flex items-center bg-blue-600 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
-          >
-          <i className="fa-brands fa-whatsapp text-white text-2xl ml-1.5"></i>
-          <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-            Connect
-          </span>
-        </a>
+            <a
+              href={`https://wa.me/918281060462?text=${encodeURIComponent(
+                "Hello! I Need Admission"
+              )}`}
+              rel="noopener noreferrer"
+              target="_blank"
+              className="group decoration-none flex items-center bg-blue-600 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
+            >
+              <i className="fa-brands fa-whatsapp text-white text-2xl ml-1.5"></i>
+              <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                Connect
+              </span>
+            </a>
           </div>
-      </div>
+        </div>
       </div>
 
       {/* Modal for College List */}
@@ -183,16 +197,14 @@ export default function Commerce() {
           href="https://wa.me/918281060462?text=I%20want%20admission%20assistance"
           rel="noopener noreferrer"
           target="_blank"
-          className="group flex items-center bg-blue-500 rounded-full shadow-xl hover:bg-green-600 transition-all duration-800 overflow-hidden w-12 h-12 hover:w-48"
+          className="group flex items-center bg-blue-500 rounded-full shadow-xl hover:bg-green-600 transition-all duration-500 overflow-hidden w-12 h-12 hover:w-48"
         >
           <span className="text-xl ms-2.5">📞</span>
-          <span className="ml-2 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-100">
+          <span className="ml-2 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
             Talk to an Expert
           </span>
         </a>
       </div>
-      
-     
     </>
   );
 }

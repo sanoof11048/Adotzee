@@ -65,7 +65,7 @@ function Services() {
         Just get in touch to talk through your options with one of our friendly
         education advisors.
       </p>
-      <button className="mt-4 bg-primary hover:bg-white hover:text-primary text-white font-semibold py-2 px-4 rounded mx-auto md:mx-0 block">
+      <button href="https://wa.me/918281060462?text=I%20want%20admission%20assistance" className="mt-4 bg-primary hover:bg-white hover:text-primary text-white font-semibold py-2 px-4 rounded mx-auto md:mx-0 block">
   Get in touch
 </button>
 

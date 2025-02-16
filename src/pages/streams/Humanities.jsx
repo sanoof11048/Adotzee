@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useCourse } from "../../components/Context/courseData";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 export default function Humanities() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -17,7 +19,9 @@ export default function Humanities() {
     <>
       <Navbar />
       <div className="flex flex-col items-center min-h-screen min-w-screen bg-gradient-to-br from-[#041C32] to-[#04293A] w-full pt-10">
-        <h1 className="mt-10 text-white text-4xl font-extrabold text-center">📜 Explore Humanities Degrees</h1>
+        <h1 className="mt-10 text-white text-4xl font-extrabold text-center">
+          📜 Explore Humanities Degrees
+        </h1>
 
         <div className="mx-4 sm:mx-15 md:mx-40 bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-fit md:min-w-5xl mt-10">
           <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
@@ -29,13 +33,13 @@ export default function Humanities() {
             {humanitiesCourses.map((course, index) => (
               <div key={index} className="w-full">
                 <div
-                  className={`cursor-pointer p-4 border border-white/40 rounded-lg shadow-md text-lg text-center font-semibold 
-                  transition-all duration-300 ease-in-out flex items-center justify-center gap-3
-                  ${
-                    selectedCategory === course.category
-                      ? "bg-white text-black font-bold"
-                      : "bg-transparent text-white hover:bg-white/20"
-                  }`}
+                  className={`cursor-pointer p-4 border border-white/40 rounded-lg shadow-md text-lg font-semibold 
+                    transition-all duration-300 ease-in-out flex items-center justify-between gap-3
+                    ${
+                      selectedCategory === course.category
+                        ? "bg-white text-black font-bold"
+                        : "bg-transparent text-white hover:bg-white/20"
+                    }`}
                   onClick={() => {
                     setSelectedCategory((prev) =>
                       prev === course.category ? "" : course.category
@@ -44,6 +48,14 @@ export default function Humanities() {
                   }}
                 >
                   📖 {course.category}
+                  <FontAwesomeIcon
+                    icon={
+                      selectedCategory === course.category
+                        ? faChevronUp
+                        : faChevronDown
+                    }
+                    className="transition-transform duration-300"
+                  />
                 </div>
 
                 {/* Show Addon Courses Under Selected Category */}
@@ -52,7 +64,7 @@ export default function Humanities() {
                     <h3 className="text-white text-lg font-semibold text-center mb-2">
                       🎯 Click an Addon Course to See Colleges
                     </h3>
-                    <ul className="list-none flex flex-col gap-3">
+                    <ul className="list-none flex flex-col gap-3 m-0 p-0">
                       {course.addons.map((addon, idx) => (
                         <li
                           key={idx}
@@ -63,8 +75,12 @@ export default function Humanities() {
                             setIsModalOpen(true);
                           }}
                         >
-                          <span className="text-lg font-medium">🏺 {addon.name}</span>
-                          <span className="text-sm text-white/80">🔍 Click for Colleges</span>
+                          <span className="md:text-lg text-size-sm font-medium text-left">
+                            🏺 {addon.name}
+                          </span>
+                          <span className="text-sm text-white/80 text-right">
+                            🔍 Click for Colleges
+                          </span>
                         </li>
                       ))}
                     </ul>
