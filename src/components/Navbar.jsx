@@ -54,7 +54,6 @@ function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile Menu with UnoCSS Animation */}
       <div
         className={`fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300 ${
           isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"

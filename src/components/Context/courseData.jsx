@@ -110,11 +110,11 @@ export const CourseProvider = ({ children }) => {
         {
           name: "BBA",
           colleges: [
-            "ACHARYA COLLEGE BANGALORE",
-            "SRINIVAS UNIVERSITY MANGALORE",
-            "BRINDAVAN COLLEGE BANGALORE",
-            "CMR COLLEGE BANGALORE",
-            "SEA COLLEGE BANGALORE",
+            "Acharya College Bangalore",
+            "Srinivas University Mangalore",
+            "Brindavan College Bangalore",
+            "Cmr College Bangalore",
+            "Sea College Bangalore",
             "KRUPANIDHI COLLEGE BANGALORE",
             "PRESIDENCY UNIVERSITY BANGALORE",
             "S-VYASA BANGALORE",
@@ -124,7 +124,7 @@ export const CourseProvider = ({ children }) => {
         },
         {
           name: "BBA + LOGISTICS",
-          colleges: ["PRESIDENCY UNIVERSITY BANGALORE"],
+          colleges: ["Presidency University Bangalore"],
         },
         {
           name: "BBA + BUSINESS ANALYST",
