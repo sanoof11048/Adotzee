@@ -21,7 +21,9 @@ export default function CollegeList() {
           🏛️ Colleges Offering {addonName}
         </h1>
 
-        <div className="bg-white p-6 rounded-lg shadow-xl w-96 md:w-[75%] mt-10">
+        {/* <div className="bg-white p-6 rounded-lg shadow-xl w-full mx-50 md:w-[75%] mt-10"> */}
+        <div className="mx-4 sm:mx-10 md:mx-40 bg-white backdrop-blur-lg p-2 mb-30 rounded-lg shadow-xs w-fit md:min-w-5xl mt-6">
+
           <ul className="p-0 m-0">
             {selectedColleges.length > 0 ? (
               selectedColleges.map((college, index) => (
