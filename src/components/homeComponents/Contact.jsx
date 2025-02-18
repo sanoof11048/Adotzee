@@ -2,6 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import Footer from "../Footer";
 
 export default function Contact() {
   const formik = useFormik({
@@ -41,7 +42,6 @@ export default function Contact() {
         });
         const response = await fetch(
           "https://script.google.com/macros/s/AKfycbyRtalwDkFUXHycXDF5VrMVxuc95T6ahWwwutlW5qKvOxC2ObT2lZifTbPLw_nPCnGm/exec",
-          // "https://script.google.com/macros/s/AKfycbxsdxL0fooufrcqwW5VEGSAgVWtYexmV-CoUguotifyETrOZJbU6j4HQ7C8HOjF6Gs/exec",
           {
             method: "POST",
             body: formDataSend,
@@ -74,10 +74,10 @@ export default function Contact() {
   return (
     <div
       id="contact"
-      className="bg-[#0d0d2b] min-h-screen flex flex-col items-center py-10"
+      className="bg-blue-100 min-h-screen flex flex-col items-center py-10"
     >
       <div className="w-full max-w-4xl flex flex-col items-center">
-        <h1 className="text-4xl text-white font-bold mb-4">
+        <h1 className="text-4xl text-gray-600 font-bold mb-4">
           Get in touch with us
         </h1>
         <p className="text-gray-400 text-center mb-8">
@@ -87,29 +87,25 @@ export default function Contact() {
 
       <div
         style={{
-          backgroundImage: `url("https://cdn.pixabay.com/photo/2019/08/30/06/03/telephone-4440525_1280.jpg")`,
+          backgroundImage: `url("https://images.unsplash.com/photo-1528747045269-390fe33c19f2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-        className="bg-white p-6 rounded-2xl shadow-md max-w-4xl md:w-full  flex flex-col md:flex-row"
+        className="bg-white p-6 rounded-2xl shadow-md max-w-4xl md:w-full flex flex-col md:flex-row justify-end"
       >
-        <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-4">
-          {/* <img src="https://cdn.pixabay.com/photo/2019/08/30/06/03/telephone-4440525_1280.jpg" alt="Placeholder" className="rounded-lg shadow-lg mb-4 w-full" /> */}
-        </div>
-
         <form
           onSubmit={(e) => {
             e.preventDefault(); // Prevent default form submission
             formik.handleSubmit();
           }}
-          className="w-full md:w-1/2 flex flex-col space-y-4 md:p-4"
+          className="w-full md:w-1/2 flex flex-col space-y-4 md:p-4 ml-auto"  // Adjusted to align the form to the right
         >
           <div>
             <input
               type="text"
               name="name"
               placeholder="Your name here"
-              className={` p-3 rounded-lg border-0 bg-gray-2 focus:ring-none focus:outline-none md:w-full w-fit`}
+              className="p-3 rounded-lg border-0 bg-gray-2/50 placeholder-gray-600  focus:ring-none focus:outline-none md:w-[95%] w-fit"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.name}
@@ -128,7 +124,7 @@ export default function Contact() {
               inputMode="numeric"
               pattern="[0-9]*"
               placeholder="Your Phone Number here"
-              className={`p-3 rounded-lg border-0 focus:ring-none bg-gray-2  focus:outline-none md:w-full w-fit`}
+              className="p-3 rounded-lg border-0 focus:ring-none bg-gray-2/50 placeholder-gray-600  focus:outline-none  md:w-[95%] w-fit"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.number}
@@ -144,7 +140,7 @@ export default function Contact() {
             <textarea
               name="message"
               placeholder="Your message here"
-              className={`p-3 rounded-lg border-0 focus:ring-none bg-gray-2  focus:outline-none w-fit md:w-full h-32`}
+              className="p-3 rounded-lg border-0 resize-none focus:ring-none bg-gray-2/50 placeholder-gray-600 focus:outline-none w-fit  md:w-[95%] h-32"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.message}
@@ -158,55 +154,15 @@ export default function Contact() {
 
           <button
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none transition"
+            className={`py-2 px-4 md:w-full rounded-lg focus:outline-none  md:w-[10%] transition 
+              ${formik.isValid && formik.dirty ? 
+                "bg-blue-500 text-gray-300 hover:bg-blue-600" : 
+                "bg-blue-200 text-gray-500 cursor-not-allowed"}`}
+            disabled={!(formik.isValid && formik.dirty)} // Disable the button if form is invalid or unchanged
           >
             Send message
           </button>
         </form>
-      </div>
-
-      <div className="w-full max-w-4xl mt-10 text-center text-gray-400">
-        <p>&copy; All Rights Reserved. ADOTZEE</p>
-      </div>
-
-      <div className="flex space-x-3 mt-4 ">
-        <a
-          href="https://www.facebook.com/share/1WeqyuRjTd/?mibextid=wwXIfr"
-          rel="noopener noreferrer"
-          target="_blank"
-          className="group flex decoration-none  bg-blue-600 rounded-full p-2 items-center  shadow-md hover:bg-blue-700 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
-        >
-          <i className="fab fa-facebook text-white text-2xl ml-1.5"></i>
-          <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-            Connect
-          </span>
-        </a>
-
-        <a
-          rel="noopener noreferrer"
-          href="https://www.instagram.com/adotzee.inn"
-          target="_blank"
-          className="group flex items-center decoration-none bg-blue-500 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
-        >
-          <i className="fab fa-instagram text-white text-2xl ml-1.5"></i>
-          <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-            Connect
-          </span>
-        </a>
-
-        <a
-          href={`https://wa.me/918281060462?text=${encodeURIComponent(
-            "Hello! I Need Admission"
-          )}`}
-          rel="noopener noreferrer"
-          target="_blank"
-          className="group decoration-none flex items-center bg-blue-600 rounded-full p-2 shadow-md hover:bg-blue-600 transition-all duration-300 overflow-hidden w-8 h-8 hover:w-32"
-        >
-          <i className="fa-brands fa-whatsapp text-white text-2xl ml-1.5"></i>
-          <span className="ml-2 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-            Connect
-          </span>
-        </a>
       </div>
     </div>
   );

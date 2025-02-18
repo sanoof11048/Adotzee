@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../components/Navbar";
-import { useCourse } from "../../components/Context/courseData";
 import Counts from "./Counts";
 import Footer from "../../components/Footer";
+import { useCourse } from "../../Context/courseData";
+import Back from "../../components/Back/Back";
 
 export default function Commerce() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -14,6 +15,7 @@ export default function Commerce() {
 
   return (
     <>
+    <Back/>
       <Navbar />
       <div className="flex flex-col items-center min-h-screen min-w-screen bg-gradient-to-br from-[#6a85b6] to-[#bac8e0] w-full pt-10">
         <h1 className="pt-10 md:pt15 mt-0 text-white text-2xl md:text-4xl font-extrabold text-center">
@@ -21,17 +23,17 @@ export default function Commerce() {
         </h1>
 
         <p className="text-white text-lg p-3">
-          🎓 Over <span className="text-yellow-400 font-bold">89</span> students have started their careers with us!
+          🎓 Over <span className="text-yellow-400 font-bold">24+</span> students have started their careers with us!
         </p>
 
         <div className="mx-4 sm:mx-10 md:mx-40 bg-primary/50 backdrop-blur-lg p-10 mb-30 rounded-2xl shadow-2xl w-fit md:min-w-5xl mt-10">
           <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
-            💼 Commerce Degree Courses
+          Commerce Degree Courses
           </h1>
 
-          <p className="text-center text-white text-lg mb-5">
+          {/* <p className="text-center text-white text-lg mb-5">
             📢 **Secure Your Admission Today!**
-          </p>
+          </p> */}
 
           {/* Category List */}
           <div className="flex flex-col gap-6">

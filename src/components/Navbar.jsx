@@ -1,18 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import hat from "../assets/hat.png";
 import text from "../assets/textlogo.png";
 import logo from "../assets/logo-removebg.png";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+
+  useEffect(() => {
+    let lastScrollTop = 0;
+    
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      if (currentScrollPos > lastScrollTop) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+      lastScrollTop = currentScrollPos <= 0 ? 0 : currentScrollPos; 
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className="fixed w-full top-0 z-49">
+    <div className="w-[85%] align-middle top-0 fixed z-49 mx-[7.5%] mt-6">
       <header
         id="navbar"
-        className="bg-gray-400 bg-opacity-75 flex justify-between items-center shadow-lg px-5 py-0"
+        className={`bg-gray-500 bg-opacity-75 flex justify-between rounded-md items-center shadow-lg px-5 py-0 transition-all duration-300 ${showNavbar ? "translate-y-0" : "-translate-y-28"}`}
       >
         {/* Logo Section */}
         <div className="flex items-center">
@@ -29,10 +50,9 @@ function Navbar() {
           <img src={logo} className="w-22 h-22 -m-5 md:hidden" />
         </div>
 
-    
         <a
           onClick={toggleMenu}
-          className="cursor-pointer md:hidden p-1 text-gray-700 focus:outline-none "
+          className="cursor-pointer md:hidden p-1 text-gray-700 focus:outline-none"
         >
           <i className="fa-solid fa-ellipsis-vertical"></i>
         </a>
@@ -74,7 +94,6 @@ function Navbar() {
             ✖
           </button>
 
-          {/* Navigation Links */}
           {["Home", "About", "Services", "Contact"].map((item) => (
             <a
               key={item}
@@ -86,15 +105,11 @@ function Navbar() {
             </a>
           ))}
 
-          {/* Social Icons */}
           <div className="flex fixed bottom-10 left-1/2 transform -translate-x-1/2 space-x-4 justify-center items-center">
-            {[
-              { href:"https://www.facebook.com/share/1WeqyuRjTd/?mibextid=wwXIfr", icon: "fab fa-facebook" },
-              {   href:"https://www.instagram.com/adotzee.inn", icon: "fab fa-instagram" },
-              {
-                href: "https://wa.me/918281060462?text=Hello I need Admission for Degree!, Can you Guide me",
-                icon: "fab fa-whatsapp",
-              },
+            {[ 
+              { href: "https://www.facebook.com/share/1WeqyuRjTd/?mibextid=wwXIfr", icon: "fab fa-facebook" },
+              { href: "https://www.instagram.com/adotzee.inn", icon: "fab fa-instagram" },
+              { href: "https://wa.me/918281060462?text=Hello I need Admission for Degree!, Can you Guide me", icon: "fab fa-whatsapp" }
             ].map((social, index) => (
               <a
                 key={index}
