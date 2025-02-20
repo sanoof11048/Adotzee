@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import ParticlesBackground from "../../particles/particle";
-import Navbar from "../Navbar";
 
 function Intro() {
   const navigate = useNavigate();
@@ -14,17 +13,14 @@ function Intro() {
 
   return (
     <>
-      <Navbar />
       <section
         id="home"
-        className="relative w-full flex items-center justify-center min-h-screen text-gray-800 text-center bg-gray-100 overflow-hidden md:pt-13 md:pb-10 pt-3 pb-3"
+        className="relative w-full flex items-center justify-center min-h-screen text-gray-800 text-center bg-gray-100 overflow-hidden pt-3 pb-3"
       >
-        {/* Particles Limited to the Intro Section */}
         <div className="absolute top-0 left-0 w-full h-full z-5 pointer-events-none">
           <ParticlesBackground />
         </div>
 
-        {/* Content Box */}
         <div
           className="w-full md:mt-10 max-w-4xl bg-white shadow-xl mx-10 rounded-3xl p-6 sm:p-8 md:p-10 relative z-10"
           data-aos="fade-up"
@@ -42,12 +38,10 @@ function Intro() {
             </span>
             .
           </p>
-          <p className="text-md sm:text-lg md:text-xl text-gray-500 mb-6">
+          <h1 className="text-md sm:text-lg md:text-xl text-gray-500 mb-6">
             Choose the Stream for Future{" "}
             <span className="animate-bounce">↓</span>
-          </p>
-
-          {/* Call-to-Action Buttons with AOS */}
+          </h1>
           <div
             className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4"
             data-aos="zoom-in"

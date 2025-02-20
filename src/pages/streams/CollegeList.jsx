@@ -13,7 +13,11 @@ export default function CollegeList() {
 
   useEffect(() => {
     // Find the addon course by name in the selected category (Commerce, Science, Humanities)
-    const allCourses = [...commerceCourses, ...scienceCourses, ...humanitiesCourses];
+    const allCourses = [
+      ...commerceCourses,
+      ...scienceCourses,
+      ...humanitiesCourses,
+    ];
 
     const foundAddon = allCourses
       .flatMap((course) => course.addons) // Flatten the array to search through all addons
@@ -26,7 +30,7 @@ export default function CollegeList() {
 
   return (
     <>
-        <Back/>
+      <Back />
 
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-[#6a85b6] to-[#bac8e0] flex flex-col items-center pt-30">
@@ -34,7 +38,9 @@ export default function CollegeList() {
           Colleges Offering {addonName}
         </h1>
 
-        <div className="mx-4 sm:mx-10 md:mx-40 bg-white backdrop-blur-lg p-2 mb-30 rounded-lg shadow-xs w-fit md:min-w-3xl mt-6">
+        <div className="mx-4 sm:mx-10 md:mx-40 bg-white backdrop-blur-lg p-2 mb-10 rounded-lg shadow-xs w-fit md:min-w-3xl mt-12">
+        <p class="text-lg text-gray-700 font-medium mt-4 mb-6 text-center">Choose the college that aligns with your interests.</p>
+
           <ul className="p-5 m-0">
             {selectedColleges.length > 0 ? (
               selectedColleges.map((college, index) => (
@@ -56,7 +62,9 @@ export default function CollegeList() {
                 </li>
               ))
             ) : (
-              <p className="text-center text-gray-600">No colleges found for this course.</p>
+              <p className="text-center text-gray-600">
+                No colleges found for this course.
+              </p>
             )}
           </ul>
         </div>

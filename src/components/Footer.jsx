@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { lazy } from 'react'
+const FooterLogo = lazy(() => import("../components/LazyImages/FooterLogo"));
 
 function Footer() {
   return (
     <>
-    <div className="w-full  mt-30 text-center text-gray-700">
+    <div className="w-full mt-8 text-center text-gray-700">
+    <FooterLogo/>
     <p>&copy; All Rights Reserved. ADOTZEE</p>
   </div>
 
-  <div className="flex space-x-3 mt-0 pb-10 items-center justify-center">
+  <div className="flex space-x-3 mt-0 md:pb-10 pb-2 items-center justify-center">
     <a
       href="https://www.facebook.com/share/1WeqyuRjTd/?mibextid=wwXIfr"
       rel="noopener noreferrer"

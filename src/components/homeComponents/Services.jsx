@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdmissionModal from "./contactModal";
-import AOS from 'aos';
-import 'aos/dist/aos.css'; // Import AOS CSS
+import AOS from "aos";
+import "aos/dist/aos.css"; // Import AOS CSS
 
 function Services() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,7 +21,7 @@ function Services() {
     return (
       <div
         onClick={() => setIsModalOpen(true)}
-        className="cursor-pointer p-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:scale-102 duration-300 transition transform shadow-xl hover:shadow-2xl hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600"
+        className="cursor-pointer p-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:scale-101 duration-300 transition transform shadow-xl hover:shadow-2xl hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600"
         data-aos="fade-up" // AOS animation for fade-up effect
       >
         <h3 className="text-2xl font-semibold mb-2">{title}</h3>
@@ -69,7 +69,7 @@ function Services() {
             description="Help in identifying and applying for scholarships."
           />
         </div>
-        
+
         <AdmissionModal isOpen={isModalOpen} closeModal={closeModal} />
       </section>
 
@@ -81,7 +81,8 @@ function Services() {
           Not sure what you need to apply?
         </h2>
         <p className="mt-2 text-md md:text-left text-white">
-          Get in touch to talk through your options with one of our friendly education advisors.
+          Get in touch to talk through your options with one of our friendly
+          education advisors.
         </p>
 
         <a

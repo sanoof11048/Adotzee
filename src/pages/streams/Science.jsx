@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../components/Navbar";
-import Counts from "./Counts";
+import Counts from "../../components/Stat/Counts";
 import Footer from "../../components/Footer";
 import { useCourse } from "../../Context/courseData";
 import Back from "../../components/Back/Back";
