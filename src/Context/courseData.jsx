@@ -113,12 +113,12 @@ export const CourseProvider = ({ children }) => {
             "Acharya",
             "Presidency",
             "Krupanidhi",
-            "Srinivas",
-            "MS Ramiyah",
+            "Srinivas University",
+            "MS Ramaiah",
             "Yenepoya",
             "Jain University",
             "Brindavan",
-            "SEA",
+            "SEA College",
             "S-Vyasa",
             "HKBK",
             "RR Institution",
@@ -143,7 +143,7 @@ export const CourseProvider = ({ children }) => {
           name: "BBA + Aviation",
           colleges: [
             "Krupanidhi",
-            "Srinivas",
+            "Srinivas University",
             "Acharya",
             "East West College of Management",
             "IZEE Business School",
@@ -161,12 +161,12 @@ export const CourseProvider = ({ children }) => {
             "Yenepoya",
             "Krupanidhi",
             "S-Vyasa",
-            "Srinivas",
+            "Srinivas University",
           ],
         },
         {
           name: "BBA + Hospital Administration",
-          colleges: ["Srinivas", "Brindavan", "Yenepoya Bangalore", "Yenepoya"],
+          colleges: ["Srinivas University", "Brindavan", "Yenepoya Bangalore", "Yenepoya"],
         },
         {
           name: "BBA + Sports Management",
@@ -214,8 +214,8 @@ export const CourseProvider = ({ children }) => {
           colleges: [
             "Acharya",
             "Jain University",
-            "MS Ramiyah",
-            "Srinivas",
+            "MS Ramaiah",
+            "Srinivas University",
             "East West College of Management",
             "Brindavan",
             "Karnataka College",
@@ -225,7 +225,7 @@ export const CourseProvider = ({ children }) => {
         },
         {
           name: "B.COM INTERNATIONAL ACCOUNTING WITH INTEGRATED ACCA",
-          colleges: ["Yenepoya", "Srinivas", "S-Vyasa"],
+          colleges: ["Yenepoya", "Srinivas University", "S-Vyasa"],
         },
         {
           name: "B.COM ACCA",
@@ -331,7 +331,7 @@ export const CourseProvider = ({ children }) => {
         },
         {
           "name": "BCA Cloud Computing, Cyber Security & Digital Forensic",
-          "colleges": ["Srinivas", "S-Vyasa"]
+          "colleges": ["Srinivas University", "S-Vyasa"]
         },
         {
           "name": "BCA Global",
@@ -339,15 +339,15 @@ export const CourseProvider = ({ children }) => {
         },
         {
           "name": "BCA Robotics, AI And Virtual Reality",
-          "colleges": ["Srinivas"]
+          "colleges": ["Srinivas University"]
         },
         {
           "name": "BCA Cloud Computing, Ethical Hacking & Cyber Security",
-          "colleges": ["Srinivas", "S-Vyasa", "Brindavan"]
+          "colleges": ["Srinivas University", "S-Vyasa", "Brindavan"]
         },
         {
           "name": "BCA AI, Cloud Computing & DevOps",
-          "colleges": ["Srinivas", "S-Vyasa", "Brindavan"]
+          "colleges": ["Srinivas University", "S-Vyasa", "Brindavan"]
         },
         {
           "name": "BCA AI, ML, Robotics & IOT",
@@ -355,7 +355,7 @@ export const CourseProvider = ({ children }) => {
         },
         {
           "name": "BCA Metaverse, Blockchain Technology And Virtual Reality",
-          "colleges": ["Srinivas"]
+          "colleges": ["Srinivas University"]
         },
         {
           "name": "BCA Robotics",
@@ -554,27 +554,27 @@ export const CourseProvider = ({ children }) => {
       addons: [
         {
           name: "BA - Criminology",
-          colleges: ["Acharya", "SEA"],
+          colleges: ["Acharya", "SEA College"],
         },
         {
           name: "BA - Journalism & Mass Communication",
-          colleges: ["Srinivas", "Presidency"],
+          colleges: ["Srinivas University", "Presidency"],
         },
         {
           name: "BA - Economics",
-          colleges: ["SEA", "Jain University"],
+          colleges: ["SEA College", "Jain University"],
         },
         {
           name: "BA - Psychology",
-          colleges: ["SEA", "Presidency"],
+          colleges: ["SEA College", "Presidency"],
         },
         {
           name: "BA - History",
-          colleges: ["SEA"],
+          colleges: ["SEA College"],
         },
         {
           name: "BA - Political Science",
-          colleges: ["SEA"],
+          colleges: ["SEA College"],
         },
         {
           name: "BA / B.Des - Animation",
