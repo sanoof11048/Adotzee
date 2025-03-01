@@ -36,7 +36,7 @@ export default function CollegeList() {
           Colleges Offering {addonName}
         </h1>
 
-        <div className="mx-4 sm:mx-10 md:mx-40 bg-white/80 backdrop-blur-lg p-6 mb-10 rounded-xl shadow-lg w-full max-w-4xl mt-12">
+        <div className="mx-4 sm:mx-10 md:mx-40 bg-white/80 backdrop-blur-lg p-6 mb-10 rounded-xl shadow-lg w-fit md:min-w-4xl max-w-4xl mt-12">
           <p className="text-lg text-gray-700 font-medium mt-2 mb-6 text-center">
             🎓 Choose the college that aligns with your interests.
           </p>
@@ -49,19 +49,18 @@ export default function CollegeList() {
                 className="p-4 border border-gray-300 rounded-lg flex justify-between items-center bg-white overflow-hidden shadow-md transition-all duration-300 
                 hover:bg-blue-100 hover:shadow-lg transform hover:scale-101 relative"
               >
-                {/* ⭐ Show Dotzee's Choice Badge in the top-left corner */}
                 {dotzeeChoiceColleges.includes(college.toUpperCase()) && (
                   <p className="absolute top-0 left-0 m-0 px-2 py-0.5 bg-yellow-500 text-white text-xs font-semibold rounded-br-lg">
                     ⭐ Adotzee's Choice
                   </p>
                 )}
               
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-4">
                   <span className="text-xl">🎓</span>
-                  <span className="text-[#041C32] text-lg font-semibold">
+                  <span className="text-[#041C32] md:text-lg text-sm font-semibold">
                     {college}
                   </span>
-                  <span className="text-gray-500 text-sm flex items-center">
+                  <span className="text-gray-500 text-xs md:text-sm flex items-center">
                     <i className="fa-solid fa-location-dot mr-1"></i> {collegeLocations[college] || "Unknown"}
                   </span>
                 </div>
