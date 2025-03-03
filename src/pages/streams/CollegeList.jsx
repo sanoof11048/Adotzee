@@ -46,7 +46,7 @@ export default function CollegeList() {
               selectedColleges.map((college, index) => (
                 <li
                 key={index}
-                className="p-4 border border-gray-300 rounded-lg flex justify-between items-center bg-white overflow-hidden shadow-md transition-all duration-300 
+                className="p-4 pt-5 md:pt-4 border border-gray-300 rounded-lg flex justify-between items-center bg-white overflow-hidden shadow-md transition-all duration-300 
                 hover:bg-blue-100 hover:shadow-lg transform hover:scale-101 relative"
               >
                 {dotzeeChoiceColleges.includes(college.toUpperCase()) && (
