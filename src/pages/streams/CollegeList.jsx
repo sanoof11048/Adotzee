@@ -55,9 +55,9 @@ export default function CollegeList() {
                   </p>
                 )}
               
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 md:space-x-4">
                   <span className="text-xl">🎓</span>
-                  <span className="text-[#041C32] md:text-lg text-sm font-semibold">
+                  <span className="text-[#041C32] font-semibold   md:text-lg text-size-sm font-medium text-left">
                     {college}
                   </span>
                   <span className="text-gray-500 text-xs md:text-sm flex items-center">

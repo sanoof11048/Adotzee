@@ -781,8 +781,10 @@ export const CourseProvider = ({ children }) => {
   const dotzeeChoiceColleges = [
     "JAIN UNIVERSITY",
     "YENEPOYA",
-    "SRINIVAS UNIVERSITY",
+    "MS RAMAIAH",
     "ACHARYA",
+    "PRESIDANCY",
+    "KRUPANIDHI"
   ]; 
 
   return (
