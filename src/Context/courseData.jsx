@@ -14,7 +14,7 @@ export const CourseProvider = ({ children }) => {
         {
           name: "General Nursing",
           colleges: [
-            "MS Ramiyah",
+            "MS Ramaiah",
             "RR Institution",
             "Pes",
             "Yenepoya",
@@ -44,7 +44,7 @@ export const CourseProvider = ({ children }) => {
         {
           name: "GNM - General Nursing and Midwifery",
           colleges: [
-            "MS Ramiyah",
+            "MS Ramaiah",
             "Yenepoya",
             "Acharya",
             "Karnataka College",

@@ -25,7 +25,9 @@ export default function CollegeList() {
       setSelectedColleges(foundAddon.colleges);
     }
   }, [addonName, commerceCourses, scienceCourses, humanitiesCourses ]);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <Back />
