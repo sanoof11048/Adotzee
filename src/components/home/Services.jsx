@@ -21,7 +21,7 @@ function Services() {
     return (
       <a
       
-       href={`https://wa.me/918281060462?text=I%20N eed%20Know%20About%20Your%20${title}%20Scheme`}
+       href={`https://wa.me/918281060462?text=I%20Need%20Know%20About%20Your%20${title}%20Scheme`}
           target="_blank"
         // onClick={() => setIsModalOpen(true)}
         className="cursor-pointer p-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:scale-101 duration-300 transition transform shadow-xl hover:shadow-2xl hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600"
