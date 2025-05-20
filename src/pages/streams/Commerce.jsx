@@ -35,15 +35,22 @@ export default function Commerce() {
   }, []);
 
   const filteredCourses = searchTerm.trim()
-    ? commerceCourses
-        .map((c) => ({
-          ...c,
-          addons: c.addons.filter((a) =>
-            a.name.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-        }))
-        .filter((c) => c.addons.length)
-    : commerceCourses;
+  ? commerceCourses
+      .map((c) => ({
+        ...c,
+        addons: Array.isArray(c.addons)
+          ? c.addons.filter(
+              (a) =>
+                a &&
+                typeof a.name === "string" &&
+                a.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+          : [],
+      }))
+      .filter((c) => c.addons.length)
+  : commerceCourses;
+
+
 
   const toggleCategory = (category) => {
     setSelectedCategory((prev) => (prev === category ? "" : category));
@@ -64,10 +71,10 @@ export default function Commerce() {
     <>
       <Back />
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-[#6a85b6] to-[#bac8e0] pt-10 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-[#6a85b6] to-[#bac8e0] pt-10 px-4 pb-10">
         {/* Hero */}
         <div className="text-center  text-white mb-8">
-          <h1 className="text-3xl md:text-4xl md:mt-15 font-bold">Find Your Path in Commerce</h1>
+          <h1 className="text-3xl md:text-4xl mt-20 md:mt-15 font-bold">Find Your Path in Commerce</h1>
           <p className="mt-2 text-lg flex justify-center items-center">
             <FontAwesomeIcon icon={faGraduationCap} className="mr-2" />
             Over <span className="text-yellow-400 font-bold mx-1">24+</span> students started careers with us!
@@ -76,37 +83,36 @@ export default function Commerce() {
 
         {/* Search Bar & Header */}
         <div className="max-w-4xl mx-auto bg-primary/50 backdrop-blur-lg p-6 rounded-xl shadow-xl mb-10">
-        <div className="flex justify-between items-center flex-wrap gap-4 mb-4 w-full">
-  <h2 className="text-2xl font-bold text-white text-center w-full md:w-auto flex-1">
-    Commerce Degree Courses
-  </h2>
-  <div className="relative">
-    <div
-      className={`flex items-center bg-white/30 p-2 rounded-full transition-all duration-300 ${
-        showSearch ? "w-64" : "w-4"
-      }`}
-    >
-      <FontAwesomeIcon
-        icon={showSearch ? faTimes : faSearch}
-        className="text-white cursor-pointer"
-        onClick={() => {
-          if (showSearch) setSearchTerm("");
-          setShowSearch(!showSearch);
-        }}
-      />
-      {showSearch && (
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="Search courses..."
-          className="ml-2 bg-transparent border-none outline-none text-white placeholder-white/70 w-full"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      )}
-    </div>
-  </div>
-</div>
+          <div className="flex justify-between items-center flex-wrap gap-4 mb-4 w-full">
+            <h2 className="text-2xl font-bold text-white text-center w-full md:w-auto flex-1">
+              Commerce Degree Courses
+            </h2>
+            <div className="relative">
+              <div
+                className={`flex items-center bg-white/30 p-2 rounded-full transition-all duration-300 ${showSearch ? "w-64" : "w-4"
+                  }`}
+              >
+                <FontAwesomeIcon
+                  icon={showSearch ? faTimes : faSearch}
+                  className="text-white cursor-pointer"
+                  onClick={() => {
+                    if (showSearch) setSearchTerm("");
+                    setShowSearch(!showSearch);
+                  }}
+                />
+                {showSearch && (
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    placeholder="Search courses..."
+                    className="ml-2 bg-transparent border-none outline-none text-white placeholder-white/70 w-full"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
 
 
           {searchTerm && (
@@ -115,7 +121,7 @@ export default function Commerce() {
                 <FontAwesomeIcon icon={faFilter} className="mr-2" />
                 Filtering: <span className="font-bold">"{searchTerm}"</span>
               </div>
-              <button onClick={() => setSearchTerm("")} className="text-white hover:text-yellow-300">
+              <button onClick={() => setSearchTerm("")} className="text-white hover:text-gray-600 bg-black/10 rounded-md">
                 <FontAwesomeIcon icon={faTimes} className="mr-1" />
                 Clear
               </button>
@@ -133,17 +139,18 @@ export default function Commerce() {
           {filteredCourses.map((course, index) => (
             <div key={index} className="mb-4">
               <div
-                className={`cursor-pointer p-4 rounded-md flex justify-between items-center ${
-                  selectedCategory === course.category
+                className={`cursor-pointer p-4 border border-white/40 rounded-lg shadow-md flex justify-between items-center ${selectedCategory === course.category
                     ? "bg-white text-primary font-bold"
-                    : "bg-white/20 text-white hover:bg-white/30"
-                }`}
+                    : "bg-transparent text-white hover:bg-white/20"
+                  }`}
                 onClick={() => toggleCategory(course.category)}
               >
                 <div className="flex items-center gap-3">
                   <FontAwesomeIcon icon={faUniversity} />
+                  <p className="font-semibold text-md md:text-lg" >
                   {course.category}
-                  <span className="bg-white/20 px-2 rounded-full text-sm">{course.addons.length} courses</span>
+                    </p>
+                  <span className="bg-white/20 px-2 rounded-full text-sm whitespace-nowrap overflow-hidden text-ellipsis">{course.addons.length} courses</span>
                 </div>
                 <FontAwesomeIcon
                   icon={selectedCategory === course.category ? faChevronUp : faChevronDown}
@@ -156,7 +163,7 @@ export default function Commerce() {
                     <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
                     Click a course to view colleges
                   </h3>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <ul className="grid grid-cols-1 p-0 md:grid-cols-2 gap-3">
                     {course.addons.map((addon, idx) => (
                       <li
                         key={idx}
@@ -165,9 +172,18 @@ export default function Commerce() {
                       >
                         <span className="flex items-center">
                           <FontAwesomeIcon icon={faBookOpen} className="mr-2" />
+                          <p className="font-semibold text-sm md:text-md" >
                           {searchTerm ? highlightText(addon.name, searchTerm) : addon.name}
+
+                          </p>
                         </span>
-                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        <div className="flex underline items-center gap-1 text-xs">
+                          <p className="font-semibold">click for colleges</p>
+                          <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        </div>
+
+
+
                       </li>
                     ))}
                   </ul>
@@ -177,9 +193,9 @@ export default function Commerce() {
           ))}
         </div>
 
-        <Counts />
-        <Footer />
       </div>
+      <Counts />
+      <Footer />
     </>
   );
 }
