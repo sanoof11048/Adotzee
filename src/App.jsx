@@ -16,6 +16,7 @@ import NotFoundPage from "./pages/404/404";
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import LinearLoading from "./components/common/LinearLoading";
+import TawkToWidget from "./components/contact/TawkToWidget ";
 
 
 config.autoAddCss = false;
@@ -42,6 +43,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/college/*" element={<NotFoundPage />} />
           </Routes>
+            <TawkToWidget />
         </Suspense>
       </CourseProvider>
     </HelmetProvider>
