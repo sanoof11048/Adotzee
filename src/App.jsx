@@ -20,6 +20,8 @@ import CourseManagement from "./Admin/components/Courses/CourseManagement";
 import CollegeManagement from "./Admin/components/Colleges/CollegeManagement";
 import AddonManagement from "./Admin/components/Addons/AddonManagement";
 import { Toaster } from "react-hot-toast";
+import CourseSelectionUI from "./pages/CourseSelectionUI";
+import CourseBrowserApp from "./pages/CourseBrowserApp";
 config.autoAddCss = false;
 
 // Lazy imports
@@ -49,6 +51,8 @@ function App() {
             <Route path="/humanities" element={<Humanities />} />
             <Route path="/college/:addonName" element={<CollegeList />} />
             <Route path="/admission" element={<Admission />} />
+            <Route path="/sample" element={<CourseSelectionUI />} />
+            <Route path="/sam" element={<CourseBrowserApp />} />
 
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
