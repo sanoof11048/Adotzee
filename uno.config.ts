@@ -1,6 +1,10 @@
-import { defineConfig } from 'unocss';
+import { defineConfig, presetUno, presetAttributify } from 'unocss'
 
 export default defineConfig({
+  presets: [
+    presetUno(),
+    presetAttributify()
+  ],
   theme: {
     colors: {
       primary: '#1e3a8a', // Deep blue
