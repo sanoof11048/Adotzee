@@ -19,9 +19,15 @@ const Dashboard = lazy(() => import('./Admin/components/Dashboard/Dashboard'));
 import CourseManagement from "./Admin/components/Courses/CourseManagement";
 import CollegeManagement from "./Admin/components/Colleges/CollegeManagement";
 import AddonManagement from "./Admin/components/Addons/AddonManagement";
+import { HostelProvider } from "./Context/HostelContext";
 import { Toaster } from "react-hot-toast";
 import CourseSelectionUI from "./pages/CourseSelectionUI";
 import CourseBrowserApp from "./pages/CourseBrowserApp";
+
+// Lazy imports for hostel pages
+const HostelList = lazy(() => import("./pages/hostels/HostelList"));
+const HostelDetails = lazy(() => import("./pages/hostels/HostelDetails"));
+
 config.autoAddCss = false;
 
 // Lazy imports
@@ -40,34 +46,40 @@ function App() {
   return (
     <HelmetProvider>
       <CourseProvider>
-        <Suspense fallback={<LinearLoading />}>
-          <TawkToChat /> {/* ← Place it here, not inside Routes */}
+        <HostelProvider>
+          <Suspense fallback={<LinearLoading />}>
+            <TawkToChat /> {/* ← Place it here, not inside Routes */}
 
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/science" element={<Science />} />
-            <Route path="/commerce" element={<Commerce />} />
-            <Route path="/humanities" element={<Humanities />} />
-            <Route path="/college/:addonName" element={<CollegeList />} />
-            <Route path="/admission" element={<Admission />} />
-            <Route path="/sample" element={<CourseSelectionUI />} />
-            <Route path="/sam" element={<CourseBrowserApp />} />
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/science" element={<Science />} />
+              <Route path="/commerce" element={<Commerce />} />
+              <Route path="/humanities" element={<Humanities />} />
+              <Route path="/college/:addonName" element={<CollegeList />} />
+              <Route path="/admission" element={<Admission />} />
+              <Route path="/sample" element={<CourseSelectionUI />} />
+              <Route path="/sam" element={<CourseBrowserApp />} />
 
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="courses" element={<CourseManagement />} />
-              <Route path="colleges" element={<CollegeManagement />} />
-              <Route path="addons" element={<AddonManagement />} />
-            </Route>
+              {/* Hostel Routes */}
+              <Route path="/hostels" element={<HostelList />} />
+              <Route path="/hostels/:id" element={<HostelDetails />} />
 
-            {/* Catch-All */}
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
-        <Toaster position="top-right"/>
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="courses" element={<CourseManagement />} />
+                <Route path="colleges" element={<CollegeManagement />} />
+                <Route path="addons" element={<AddonManagement />} />
+              </Route>
+
+              {/* Catch-All */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
+          <Toaster position="top-right"/>
+        </HostelProvider>
       </CourseProvider>
     </HelmetProvider>
   );
