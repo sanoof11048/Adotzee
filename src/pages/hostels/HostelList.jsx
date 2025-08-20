@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useHostel } from '../../Context/HostelContext';
 import Navbar from '../../components/common/Navbar';
 import Footer from '../../components/common/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,6 +17,9 @@ import {
   faSearch,
   faFilter
 } from '@fortawesome/free-solid-svg-icons';
+import { useHostel } from '../../Context/HostelContext';
+import { Building, Filter, Search, TrendingUp } from 'lucide-react';
+import PropertyCard from './components/PropertyCard';
 
 const HostelList = () => {
   const navigate = useNavigate();
@@ -29,39 +31,54 @@ const HostelList = () => {
   const [priceFilter, setPriceFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('rating');
+  const [showFilters, setShowFilters] = useState(false);
+  const [collegeSearch, setCollegeSearch] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
 
   const college = getCollegeById(selectedCollege);
   const allProperties = getPropertiesByCollegeId(selectedCollege);
+  
+  const cities = [...new Set(colleges.map(c => c.city))];
+  const filteredColleges = colleges.filter(c => 
+    c.name.toLowerCase().includes(collegeSearch.toLowerCase()) &&
+    (selectedCity === '' || c.city === selectedCity)
+  );
 
-  // Filter properties based on filters
-  const filteredProperties = allProperties.filter(property => {
-    const matchesSearch = property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         property.location.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesPrice = priceFilter === 'all' || 
-                        (priceFilter === 'low' && property.price <= 3500) ||
-                        (priceFilter === 'medium' && property.price > 3500 && property.price <= 4500) ||
-                        (priceFilter === 'high' && property.price > 4500);
-    
-    const matchesType = typeFilter === 'all' || property.type.toLowerCase() === typeFilter.toLowerCase();
-    
-    return matchesSearch && matchesPrice && matchesType;
-  });
+  // Filter and sort properties
+  const filteredProperties = useMemo(() => {
+    let filtered = allProperties.filter(property => {
+      const matchesSearch = property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           property.location.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesPrice = priceFilter === 'all' || 
+                          (priceFilter === 'low' && property.price <= 3500) ||
+                          (priceFilter === 'medium' && property.price > 3500 && property.price <= 4500) ||
+                          (priceFilter === 'high' && property.price > 4500);
+      
+      const matchesType = typeFilter === 'all' || property.type.toLowerCase() === typeFilter.toLowerCase();
+      
+      return matchesSearch && matchesPrice && matchesType;
+    });
 
-  const getAmenityIcon = (amenity) => {
-    const iconMap = {
-      'WiFi': faWifi,
-      'Food': faUtensils,
-      'Parking': faCar,
-      'Gym': faDumbbell,
-      'Security': faShieldAlt,
-      'Library': faBook,
-      'Study Room': faBook,
-      'AC': faSnowflake,
-      'Study Area': faBook
-    };
-    return iconMap[amenity] || faShieldAlt;
-  };
+    // Sort properties
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low':
+          return a.price - b.price;
+        case 'price-high':
+          return b.price - a.price;
+        case 'rating':
+          return b.rating - a.rating;
+        case 'distance':
+          return parseFloat(a.distance) - parseFloat(b.distance);
+        default:
+          return b.rating - a.rating;
+      }
+    });
+
+    return filtered;
+  }, [allProperties, searchTerm, priceFilter, typeFilter, sortBy]);
 
   const handleCollegeChange = (newCollegeId) => {
     setSelectedCollege(newCollegeId);
@@ -72,7 +89,7 @@ const HostelList = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      <div className="pt-24 pb-10">
+      <div className="pt-20 pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-8">
@@ -84,169 +101,156 @@ const HostelList = () => {
             </p>
           </div>
 
-          {/* College Selector */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          {/* Enhanced College Selector */}
+          <div className="bg-white rounded-xl shadow-md p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Select Your College</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {colleges.map(college => (
+            
+            {/* College Search */}
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search colleges..."
+                  value={collegeSearch}
+                  onChange={(e) => setCollegeSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">All Cities</option>
+                {cities.map(city => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
+              </select>
+              <div className="text-sm text-gray-600 flex items-center">
+                <Building className="w-4 h-4 mr-1" />
+                {filteredColleges.length} colleges found
+              </div>
+            </div>
+
+            {/* College Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+              {filteredColleges.map(college => (
                 <button
                   key={college.id}
                   onClick={() => handleCollegeChange(college.id)}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                  className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
                     selectedCollege == college.id
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                      ? 'border-blue-500  bg-blue-50 text-blue-700'
+                      : 'border-gray-200 bg-gray-50 hover:border-blue-300 hover:bg-gray-50'
                   }`}
                 >
-                  <h3 className="font-semibold">{college.name}</h3>
-                  <p className="text-sm text-gray-600">{college.location}</p>
+                  <h3 className="font-semibold text-sm mb-1">{college.name}</h3>
+                  <p className="text-xs text-gray-600">{college.location} • {college.type}</p>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Filters */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center space-x-2">
-                <FontAwesomeIcon icon={faSearch} className="text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search by name or location..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <FontAwesomeIcon icon={faFilter} className="text-gray-400" />
+          {/* Enhanced Filters */}
+          <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search properties..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                
                 <select
                   value={priceFilter}
                   onChange={(e) => setPriceFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">All Prices</option>
                   <option value="low">Under ₹3,500</option>
                   <option value="medium">₹3,500 - ₹4,500</option>
                   <option value="high">Above ₹4,500</option>
                 </select>
+
+                <select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">All Types</option>
+                  <option value="pg">PG</option>
+                  <option value="hostel">Hostel</option>
+                </select>
+
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="rating">Sort by Rating</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="distance">Distance</option>
+                </select>
               </div>
 
-              <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="md:hidden bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center"
               >
-                <option value="all">All Types</option>
-                <option value="pg">PG</option>
-                <option value="hostel">Hostel</option>
-              </select>
+                <Filter className="w-4 h-4 mr-2" />
+                Filters
+              </button>
             </div>
           </div>
 
           {/* Results Header */}
           {college && (
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">
-                Accommodations near {college.name}
-              </h2>
-              <p className="text-gray-600">
-                {filteredProperties.length} properties found
-              </p>
+            <div className="mb-6 flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Accommodations near {college.name}
+                </h2>
+                <p className="text-gray-600">
+                  {filteredProperties.length} properties found in {college.location}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <TrendingUp className="w-4 h-4" />
+                Updated recently
+              </div>
             </div>
           )}
 
           {/* Properties Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProperties.map(property => (
-              <div
-                key={property.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-                onClick={() => navigate(`/hostels/${property.id}`)}
-              >
-                {/* Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={property.images[0]}
-                    alt={property.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                      property.type === 'PG' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-blue-100 text-blue-800'
-                    }`}>
-                      {property.type}
-                    </span>
-                  </div>
-                  <div className="absolute top-4 right-4 bg-white rounded-full px-2 py-1">
-                    <div className="flex items-center">
-                      <FontAwesomeIcon icon={faStar} className="text-yellow-400 text-sm mr-1" />
-                      <span className="text-sm font-semibold">{property.rating}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{property.name}</h3>
-                  
-                  <div className="flex items-center text-gray-600 mb-2">
-                    <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
-                    <span className="text-sm">{property.distance}</span>
-                  </div>
-
-                  <div className="flex items-center text-2xl font-bold text-blue-600 mb-4">
-                    <FontAwesomeIcon icon={faRupeeSign} className="mr-1" />
-                    {property.price.toLocaleString()}
-                    <span className="text-sm text-gray-500 ml-1">/month</span>
-                  </div>
-
-                  {/* Amenities */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {property.amenities.slice(0, 4).map((amenity, index) => (
-                      <div key={index} className="flex items-center bg-gray-100 px-2 py-1 rounded-full">
-                        <FontAwesomeIcon 
-                          icon={getAmenityIcon(amenity)} 
-                          className="text-gray-600 text-xs mr-1" 
-                        />
-                        <span className="text-xs text-gray-700">{amenity}</span>
-                      </div>
-                    ))}
-                    {property.amenities.length > 4 && (
-                      <span className="text-xs text-gray-500 px-2 py-1">
-                        +{property.amenities.length - 4} more
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Availability */}
-                  <div className="flex justify-between items-center">
-                    <span className={`text-sm font-semibold ${
-                      property.availableRooms > 0 ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {property.availableRooms > 0 
-                        ? `${property.availableRooms} rooms available` 
-                        : 'No rooms available'
-                      }
-                    </span>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                      View Details
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <PropertyCard key={property.id} property={property} />
             ))}
           </div>
 
           {/* No Results */}
           {filteredProperties.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-gray-400 text-6xl mb-4">🏠</div>
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">🏠</div>
               <h3 className="text-xl font-semibold text-gray-600 mb-2">No properties found</h3>
-              <p className="text-gray-500">Try adjusting your filters or search terms</p>
+              <p className="text-gray-500 mb-6">Try adjusting your filters or search terms</p>
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setPriceFilter('all');
+                  setTypeFilter('all');
+                }}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+              >
+                Clear Filters
+              </button>
             </div>
           )}
         </div>

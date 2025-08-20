@@ -13,6 +13,9 @@ import './App.css'
 import CourseManagement from "./Admin/components/Courses/CourseManagement";
 import CollegeManagement from "./Admin/components/Colleges/CollegeManagement";
 import AddonManagement from "./Admin/components/Addons/AddonManagement";
+import HostelList from "./pages/hostels/HostelList";
+import HostelDetails from "./pages/hostels/HostelDetails";
+import { HostelProvider } from "./Context/HostelContext";
 
 // Lazy imports
 const Home = lazy(() => import("./pages/Home"));
@@ -38,46 +41,51 @@ function App() {
   return (
     <HelmetProvider>
       <CourseProvider>
-        <Suspense fallback={<LinearLoading />}>
+        <HostelProvider>       
+          <Suspense fallback={<LinearLoading />}>
           <TawkToChat />
 
           {/* <Router> */}
-            <Routes>
-              {/* {isAdminSubdomain ? ( */}
-                {/* // ✅ If on admin.adotzee.in, render only the Admin routes */}
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<Dashboard />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="courses" element={<CourseManagement />} />
-                  <Route path="colleges" element={<CollegeManagement />} />
-                  <Route path="addons" element={<AddonManagement />} />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Route>
-              {/* ) : ( */}
-                {/* <> */}
-                  <Route path="/" element={<Home />} />
-                  <Route path="/science" element={<Science />} />
-                  <Route path="/commerce" element={<Commerce />} />
-                  <Route path="/humanities" element={<Humanities />} />
-                  <Route path="/college/:addonName" element={<CollegeList />} />
-                  <Route path="/admission" element={<Admission />} />
-                  <Route path="/sample" element={<CourseSelectionUI />} />
-                  <Route path="/sam" element={<CourseBrowserApp />} />
-                  <Route path="/admin/*" element={<AdminLayout />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="courses" element={<CourseManagement />} />
-                    <Route path="colleges" element={<CollegeManagement />} />
-                    <Route path="addons" element={<AddonManagement />} />
-                  </Route>
-                  <Route path="*" element={<NotFoundPage />} />
-                {/* </> */}
-              {/* )} */}
-            </Routes>
+          <Routes>
+            {/* {isAdminSubdomain ? ( */}
+            {/* // ✅ If on admin.adotzee.in, render only the Admin routes */}
+            {/* <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="courses" element={<CourseManagement />} />
+              <Route path="colleges" element={<CollegeManagement />} />
+              <Route path="addons" element={<AddonManagement />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route> */}
+            {/* ) : ( */}
+            {/* <> */}
+            <Route path="/hostels" element={<HostelList />} />
+            <Route path="/hostels/:id" element={<HostelDetails />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/science" element={<Science />} />
+            <Route path="/commerce" element={<Commerce />} />
+            <Route path="/humanities" element={<Humanities />} />
+            <Route path="/college/:addonName" element={<CollegeList />} />
+            <Route path="/admission" element={<Admission />} />
+            <Route path="/sample" element={<CourseSelectionUI />} />
+            <Route path="/sam" element={<CourseBrowserApp />} />
+            <Route path="/admin/*" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="courses" element={<CourseManagement />} />
+              <Route path="colleges" element={<CollegeManagement />} />
+              <Route path="addons" element={<AddonManagement />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
+            {/* </> */}
+            {/* )} */}
+          </Routes>
           {/* </Router> */}
         </Suspense>
 
-        <Toaster position="top-right" />
+          <Toaster position="top-right" />
+        </HostelProvider>
+
       </CourseProvider>
     </HelmetProvider>
   );

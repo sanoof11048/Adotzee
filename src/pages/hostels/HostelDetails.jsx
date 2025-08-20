@@ -23,15 +23,17 @@ import {
   faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import toast from 'react-hot-toast';
+import { ArrowLeft, BookOpen, Camera, Car, CheckCircle, Dumbbell, Heart, IndianRupee, MapPin, Phone, Share2, Shield, Snowflake, Sparkles, Star, User, Users, UtensilsCrossed, Wifi, X, XCircle } from 'lucide-react';
 
 const HostelDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getPropertyById, createBooking } = useHostel();
+  const { getPropertyById, createBooking, toggleFavorite, favorites } = useHostel();
   
   const property = getPropertyById(id);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
   const [bookingData, setBookingData] = useState({
     studentName: '',
     email: '',
@@ -42,10 +44,13 @@ const HostelDetails = () => {
     specialRequests: ''
   });
 
+  const isFavorite = favorites.includes(parseInt(id));
+
   if (!property) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
+          <div className="text-6xl mb-4">🏠</div>
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Property not found</h2>
           <button 
             onClick={() => navigate('/hostels')}
@@ -60,39 +65,36 @@ const HostelDetails = () => {
 
   const getAmenityIcon = (amenity) => {
     const iconMap = {
-      'WiFi': faWifi,
-      'Food': faUtensils,
-      'Parking': faCar,
-      'Gym': faDumbbell,
-      'Security': faShieldAlt,
-      'Library': faBook,
-      'Study Room': faBook,
-      'AC': faSnowflake,
-      'Study Area': faBook,
-      'Laundry': faShieldAlt,
-      'Common Room': faBook,
-      'Recreation Room': faBook
+      'WiFi': Wifi,
+      'Food': UtensilsCrossed,
+      'Parking': Car,
+      'Gym': Dumbbell,
+      'Security': Shield,
+      'Library': BookOpen,
+      'Study Room': BookOpen,
+      'AC': Snowflake,
+      'Study Area': BookOpen,
+      'Laundry': Shield,
+      'Common Room': Users,
+      'Recreation Room': Users
     };
-    return iconMap[amenity] || faShieldAlt;
+    return iconMap[amenity] || Shield;
   };
 
   const handleBookingSubmit = (e) => {
     e.preventDefault();
     
-    // Basic validation
     if (!bookingData.studentName || !bookingData.email || !bookingData.phone || 
         !bookingData.fromDate || !bookingData.toDate) {
-      toast.error('Please fill in all required fields');
+      alert('Please fill in all required fields');
       return;
     }
 
-    // Check if from date is before to date
     if (new Date(bookingData.fromDate) >= new Date(bookingData.toDate)) {
-      toast.error('Check-out date must be after check-in date');
+      alert('Check-out date must be after check-in date');
       return;
     }
 
-    // Create booking
     const booking = createBooking({
       propertyId: property.id,
       propertyName: property.name,
@@ -100,10 +102,9 @@ const HostelDetails = () => {
       totalAmount: calculateTotalAmount()
     });
 
-    toast.success('Booking request submitted successfully!');
+    alert('Booking request submitted successfully!');
     setShowBookingForm(false);
     
-    // Reset form
     setBookingData({
       studentName: '',
       email: '',
@@ -136,32 +137,49 @@ const HostelDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen mt-10 bg-gray-50">
       <Navbar />
       
-      <div className="pt-24 pb-10">
+      <div className="pt-20 pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Button */}
-          <button
-            onClick={() => navigate('/hostels')}
-            className="flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors duration-200"
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
-            Back to Hostels
-          </button>
+          {/* Back Button & Actions */}
+          <div className="flex justify-between items-center mb-6">
+            <button
+              onClick={() => navigate('/hostels')}
+              className="flex items-center bg-transparent text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back to Hostels
+            </button>
+            
+            <div className="flex gap-3">
+              <button
+                onClick={() => toggleFavorite(property.id)}
+                className={`p-2 rounded-lg transition-colors ${
+                  isFavorite ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'
+                }`}
+              >
+                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+              </button>
+              <button className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors">
+                <Share2 className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column - Images and Details */}
             <div className="lg:col-span-2">
               {/* Image Gallery */}
-              <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+              <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
                 <div className="relative h-96">
                   <img
                     src={property.images[selectedImageIndex]}
                     alt={property.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => setShowImageModal(true)}
                   />
-                  <div className="absolute top-4 left-4">
+                  <div className="absolute top-4 left-4 flex gap-2">
                     <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                       property.type === 'PG' 
                         ? 'bg-green-100 text-green-800' 
@@ -169,12 +187,33 @@ const HostelDetails = () => {
                     }`}>
                       {property.type}
                     </span>
+                    {property.featured && (
+                      <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center">
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        Featured
+                      </span>
+                    )}
+                    {property.verified && (
+                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center">
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        Verified
+                      </span>
+                    )}
                   </div>
                   <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
                     <div className="flex items-center">
-                      <FontAwesomeIcon icon={faStar} className="text-yellow-400 mr-1" />
+                      <Star className="text-yellow-400 w-4 h-4 mr-1" />
                       <span className="font-semibold">{property.rating}</span>
                     </div>
+                  </div>
+                  <div className="absolute bottom-4 right-4">
+                    <button
+                      onClick={() => setShowImageModal(true)}
+                      className="bg-black bg-opacity-50 text-white px-3 py-1 rounded-lg flex items-center"
+                    >
+                      <Camera className="w-4 h-4 mr-1" />
+                      View All Photos
+                    </button>
                   </div>
                 </div>
                 
@@ -184,7 +223,7 @@ const HostelDetails = () => {
                     <button
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
+                      className={`w-20 bg-transparent border h-20 rounded-lg overflow-hidden border-2 ${
                         selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200'
                       }`}
                     >
@@ -199,16 +238,16 @@ const HostelDetails = () => {
               </div>
 
               {/* Property Details */}
-              <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+              <div className="bg-white rounded-xl shadow-md p-6 mb-8">
                 <h1 className="text-3xl font-bold text-gray-800 mb-4">{property.name}</h1>
                 
                 <div className="flex items-center text-gray-600 mb-4">
-                  <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
+                  <MapPin className="w-5 h-5 mr-2" />
                   <span>{property.location} • {property.distance}</span>
                 </div>
 
                 <div className="flex items-center text-3xl font-bold text-blue-600 mb-6">
-                  <FontAwesomeIcon icon={faRupeeSign} className="mr-2" />
+                  <IndianRupee className="w-6 h-6 mr-2" />
                   {property.price.toLocaleString()}
                   <span className="text-lg text-gray-500 ml-2">/month</span>
                 </div>
@@ -219,15 +258,15 @@ const HostelDetails = () => {
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-gray-800 mb-4">Amenities</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {property.amenities.map((amenity, index) => (
-                      <div key={index} className="flex items-center bg-gray-50 p-3 rounded-lg">
-                        <FontAwesomeIcon 
-                          icon={getAmenityIcon(amenity)} 
-                          className="text-blue-600 mr-3" 
-                        />
-                        <span className="text-gray-700">{amenity}</span>
-                      </div>
-                    ))}
+                    {property.amenities.map((amenity, index) => {
+                      const IconComponent = getAmenityIcon(amenity);
+                      return (
+                        <div key={index} className="flex items-center bg-gray-50 p-3 rounded-lg">
+                          <IconComponent className="text-blue-600 w-5 h-5 mr-3" />
+                          <span className="text-gray-700">{amenity}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -250,7 +289,7 @@ const HostelDetails = () => {
 
             {/* Right Column - Booking Form */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
+              <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">Book Your Stay</h3>
                 
                 {!showBookingForm ? (
@@ -264,13 +303,20 @@ const HostelDetails = () => {
                     
                     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                       <span className="text-gray-600">Availability</span>
-                      <span className={`font-semibold ${
+                      <span className={`font-semibold flex items-center ${
                         property.availableRooms > 0 ? 'text-green-600' : 'text-red-600'
                       }`}>
-                        {property.availableRooms > 0 
-                          ? `${property.availableRooms} rooms available` 
-                          : 'No rooms available'
-                        }
+                        {property.availableRooms > 0 ? (
+                          <>
+                            <CheckCircle className="w-4 h-4 mr-1" />
+                            {property.availableRooms} rooms available
+                          </>
+                        ) : (
+                          <>
+                            <XCircle className="w-4 h-4 mr-1" />
+                            No rooms available
+                          </>
+                        )}
                       </span>
                     </div>
 
@@ -289,17 +335,18 @@ const HostelDetails = () => {
                     {/* Contact Information */}
                     <div className="border-t pt-4 mt-6">
                       <h4 className="font-semibold text-gray-800 mb-3">Contact Owner</h4>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         <div className="flex items-center text-gray-600">
-                          <FontAwesomeIcon icon={faUser} className="mr-2" />
+                          <User className="w-4 h-4 mr-2" />
                           <span>{property.ownerName}</span>
                         </div>
-                        <div className="flex items-center text-gray-600">
-                          <FontAwesomeIcon icon={faPhone} className="mr-2" />
-                          <a href={`tel:${property.contactNumber}`} className="text-blue-600 hover:underline">
-                            {property.contactNumber}
-                          </a>
-                        </div>
+                        <a 
+                          href={`tel:${property.contactNumber}`} 
+                          className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                        >
+                          <Phone className="w-4 h-4 mr-2" />
+                          {property.contactNumber}
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -442,6 +489,36 @@ const HostelDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+          <div className="max-w-4xl max-h-full relative">
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute top-4 right-4 text-white bg-black bg-opacity-50 rounded-full p-2 z-10"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <img
+              src={property.images[selectedImageIndex]}
+              alt={property.name}
+              className="max-w-full max-h-full object-contain rounded-lg"
+            />
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+              {property.images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImageIndex(index)}
+                  className={`w-3 h-3 rounded-full ${
+                    selectedImageIndex === index ? 'bg-white' : 'bg-white bg-opacity-50'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
