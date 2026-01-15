@@ -1,219 +1,302 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, Tag } from 'lucide-react';
-import { Addon } from '../../types';
-import { apiService } from '../../services/api';
-import Modal from '../UI/Modal';
-import AddonForm from './AddonForm';
-import LinearLoading from '../../../components/common/LinearLoading';
-import toast from 'react-hot-toast';
-import { confirmAlert } from 'react-confirm-alert';
+import React, { useEffect, useMemo, useState } from "react";
+import { Plus, Edit, Trash2, Search, Tag, GraduationCap, Building2, ChevronDown, ChevronUp } from "lucide-react";
+import toast from "react-hot-toast";
+import Modal from "../UI/Modal";
+import LinearLoading from "../../../components/common/LinearLoading";
+import AddonForm from "./AddonForm";
+import { apiService } from "../../services/api";
+import { AddonResponseDTO } from "../../../types";
+import { swalConfirm } from "../../../utils/swalConfirm";
+import Button from "../UI/Button";
 
 const AddonManagement: React.FC = () => {
-  const [addons, setAddons] = useState<Addon[]>([]);
+  const [addons, setAddons] = useState<AddonResponseDTO[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingAddon, setEditingAddon] = useState<Addon | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [search, setSearch] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingAddon, setEditingAddon] = useState<AddonResponseDTO | null>(null);
+  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
 
-  useEffect(() => {
-    fetchAddons();
-  }, []);
+  /* ---------------- Fetch ---------------- */
 
   const fetchAddons = async () => {
     try {
       setLoading(true);
-      const data = await apiService.getAddons();
-      setAddons(data.data);
-    } catch (error) {
-      console.error('Error fetching addons:', error);
+      const res = await apiService.getAddons();
+      setAddons(res.data.data);
+    } catch {
+      toast.error("Failed to load addons");
     } finally {
       setLoading(false);
     }
   };
 
- const handleCreateAddon = async (data: any) => {
-  try {
-    setSubmitting(true);
-    await apiService.createAddon(data);
-    await fetchAddons();
-    setIsModalOpen(false);
-    toast.success('Addon created successfully');
-  } catch (error) {
-    console.error('Error creating addon:', error);
-    toast.error('Failed to create addon'); 
-  } finally {
-    setSubmitting(false);
-  }
-};
+  useEffect(() => {
+    fetchAddons();
+  }, []);
 
- const handleUpdateAddon = async (data: any) => {
-  try {
-    setSubmitting(true);
-    await apiService.updateAddon(data.id, data);
-    await fetchAddons();
-    setIsModalOpen(false);
-    setEditingAddon(null);
-    toast.success('Addon updated successfully');
-  } catch (error) {
-    console.error('Error updating addon:', error);
-    toast.error('Failed to update addon');
-  } finally {
-    setSubmitting(false);
-  }
-};
-const handleDeleteAddon = (id: number) => {
-  confirmAlert({
-    title: 'Confirm Deletion',
-    message: 'Are you sure you want to delete this addon?',
-    buttons: [
-      {
-        label: 'Yes',
-        onClick: async () => {
-          const deleting = toast.loading('Deleting addon...');
-          try {
-            await apiService.deleteAddon(id);
-            await fetchAddons();
-            toast.success('Addon deleted successfully', { id: deleting });
-          } catch (error) {
-            console.error('Error deleting addon:', error);
-            toast.error('Failed to delete addon', { id: deleting });
-          }
-        },
-      },
-      {
-        label: 'No',
-        onClick: () => {
-          toast('Deletion cancelled');
-        },
-      },
-    ],
-  });
-};
+  /* ---------------- CRUD ---------------- */
 
-  const openCreateModal = () => {
-    setEditingAddon(null);
-    setIsModalOpen(true);
+  const handleCreate = async (data: any) => {
+    try {
+      setSubmitting(true);
+      await apiService.createAddon(data);
+      toast.success("Addon created");
+      fetchAddons();
+      closeModal();
+    } catch {
+      toast.error("Failed to create addon");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const openEditModal = (addon: Addon) => {
+  const handleUpdate = async (data: any) => {
+    try {
+      setSubmitting(true);
+      await apiService.updateAddon(data.id, data);
+      toast.success("Addon updated");
+      fetchAddons();
+      closeModal();
+    } catch {
+      toast.error("Failed to update addon");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const confirmed = await swalConfirm({
+      title: "Delete Addon?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      confirmText: "Yes, delete",
+      cancelText: "No",
+    });
+
+    if (!confirmed) return;
+
+    const t = toast.loading("Deleting...");
+    try {
+      await apiService.deleteAddon(id);
+      toast.success("Deleted", { id: t });
+      fetchAddons();
+    } catch {
+      toast.error("Delete failed", { id: t });
+    }
+  };
+
+  /* ---------------- Helpers ---------------- */
+
+  const openCreate = () => {
+    setEditingAddon(null);
+    setModalOpen(true);
+  };
+
+  const openEdit = (addon: AddonResponseDTO) => {
     setEditingAddon(addon);
-    setIsModalOpen(true);
+    setModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setModalOpen(false);
     setEditingAddon(null);
   };
 
-  const filteredAddons = addons.filter(addon => 
-    addon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    addon.courseName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const toggleExpand = (id: number) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
 
-  if (loading) {
-    return (
-      <LinearLoading/>
+  const filteredAddons = useMemo(() => {
+    const q = search.toLowerCase();
+    return addons.filter(
+      a =>
+        a.name.toLowerCase().includes(q) ||
+        a.courseName.toLowerCase().includes(q)
     );
-  }
+  }, [addons, search]);
+
+  if (loading) return <LinearLoading />;
 
   return (
-    <div className="space-y-0">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Addon Management</h1>
-          <p className="text-gray-600 mt-1">Manage course addons and specializations</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/20 to-slate-100 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-1">Addon Management</h1>
+            <p className="text-sm text-gray-600">Manage course addons & specializations</p>
+          </div>
+
+          <Button
+            icon={Plus}
+            onClick={openCreate}
+          >
+            Add Addon
+          </Button>
+
         </div>
-        <button
-          onClick={openCreateModal}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <Plus size={20} className="mr-2" />
-          Add Addon
-        </button>
-      </div>
 
-      {/* Search */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <div className="relative max-w-md">
-          <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search addons..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        {/* Search */}
+        <div className="bg-white/80 backdrop-blur-xl border border-gray-200/60 rounded-2xl p-5 shadow-lg">
+          <div className="relative max-w-xl">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <input
+              className="w-full pl-11 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+              placeholder="Search by addon name or course..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Addons Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredAddons.map((addon) => (
-          <div key={addon.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex items-center">
-                <Tag size={20} className="text-purple-600 mr-2" />
-                <h3 className="text-lg font-semibold text-gray-900 truncate">{addon.name}</h3>
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => openEditModal(addon)}
-                  className="text-blue-600 hover:text-blue-900 p-1 rounded"
-                >
-                  <Edit size={16} />
-                </button>
-                <button
-                  onClick={() => handleDeleteAddon(addon.id)}
-                  className="text-red-600 hover:text-red-900 p-1 rounded"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </div>
-            
-            <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-1">Course:</p>
-              <p className="text-sm font-medium text-gray-900">{addon.courseName}</p>
-            </div>
+        {/* Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredAddons.map(addon => {
+            const isExpanded = expandedCards.has(addon.id);
+            const collegeCount = addon.collegeNames?.length || 0;
+            const hasColleges = collegeCount > 0;
+            const displayColleges = isExpanded ? addon.collegeNames : addon.collegeNames?.slice(0, 3);
+            const hasMore = collegeCount > 3;
 
-            {addon.collegeNames && addon.collegeNames.length > 0 && (
-              <div>
-                <p className="text-sm text-gray-600 mb-2">Available at:</p>
-                <div className="space-y-1">
-                  {addon.collegeNames.slice(0, 2).map((college, index) => (
-                    <p key={index} className="text-xs text-gray-700 bg-gray-100 px-2 py-1 rounded">
-                      {college}
-                    </p>
-                  ))}
-                  {addon.collegeNames.length > 2 && (
-                    <p className="text-xs text-gray-500">
-                      +{addon.collegeNames.length - 2} more colleges
-                    </p>
-                  )}
+            return (
+              <div
+                key={addon.id}
+                className="group bg-white/80 backdrop-blur-xl border border-gray-200/60 rounded-2xl p-6 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+              >
+                {/* Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start gap-3 flex-1">
+                    <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-md">
+                      <Tag className="text-white" size={18} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-1 break-words">
+                        {addon.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon={Edit}
+                      onClick={() => openEdit(addon)}
+                    />
+
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon={Trash2}
+                      onClick={() => handleDelete(addon.id)}
+                      className="text-red-600 hover:bg-red-50"
+                    />
+                  </div>
                 </div>
+
+                {/* Course Info */}
+                <div className="mb-4 pb-4 border-b border-gray-100">
+                  <div className="flex items-center gap-2 text-sm">
+                    <GraduationCap size={16} className="text-gray-500 flex-shrink-0" />
+                    <span className="text-gray-600">Course:</span>
+                    <span className="font-medium text-gray-900 truncate">{addon.courseName}</span>
+                  </div>
+                </div>
+
+                {/* Colleges */}
+                {hasColleges ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs mb-2">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Building2 size={14} />
+                        <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                          {collegeCount} Colleges
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Scrollable college list */}
+                    <div className={`space-y-1.5 ${isExpanded ? 'max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100' : ''}`}>
+                      {displayColleges?.map((college, i) => (
+                        <div
+                          key={i}
+                          className="text-xs bg-gradient-to-r from-gray-50 to-gray-100/50 text-gray-700 rounded-lg px-3 py-2 border border-gray-200/50 font-medium"
+                        >
+                          {college}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Show more/less button */}
+                    {hasMore && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={isExpanded ? ChevronUp : ChevronDown}
+                        onClick={() => toggleExpand(addon.id)}
+                        fullWidth
+                      >
+                        {isExpanded ? "Show less" : `Show ${collegeCount - 3} more`}
+                      </Button>
+
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-xs text-gray-400 italic py-3 text-center bg-gray-50 rounded-lg">
+                    No colleges assigned yet
+                  </div>
+
+                )}
               </div>
+            );
+          })}
+        </div>
+
+        {/* Empty State */}
+        {filteredAddons.length === 0 && (
+          <div className="bg-white/80 backdrop-blur-xl border border-gray-200/60 rounded-2xl p-16 text-center shadow-lg">
+            <div className="inline-flex p-4 bg-purple-50 rounded-2xl mb-4">
+              <Tag size={48} className="text-purple-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No addons found</h3>
+            <p className="text-gray-500 mb-6">
+              {search ? "Try adjusting your search criteria" : "Get started by creating your first addon"}
+            </p>
+            {!search && (
+              <Button
+                icon={Plus}
+                onClick={openCreate}
+              >
+                Create First Addon
+              </Button>
+
             )}
           </div>
-        ))}
+        )}
+
       </div>
 
-      {filteredAddons.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No addons found matching your search criteria.</p>
-        </div>
-      )}
-
-      {/* Addon Modal */}
+      {/* Modal */}
       <Modal
-        isOpen={isModalOpen}
+        isOpen={modalOpen}
         onClose={closeModal}
-        title={editingAddon ? 'Edit Addon' : 'Add New Addon'}
+        title={editingAddon ? "Edit Addon" : "Add Addon"}
         size="lg"
       >
         <AddonForm
-          addon={editingAddon || undefined}
-          onSubmit={editingAddon ? handleUpdateAddon : handleCreateAddon}
+          addon={editingAddon ?? undefined}
+          onSubmit={editingAddon ? handleUpdate : handleCreate}
           onCancel={closeModal}
           loading={submitting}
         />

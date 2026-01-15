@@ -223,7 +223,7 @@ const HostelDetails = () => {
                     <button
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`w-20 bg-transparent border h-20 rounded-lg overflow-hidden border-2 ${
+                      className={`w-20 bg-transparent h-20 rounded-lg overflow-hidden border-2 ${
                         selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200'
                       }`}
                     >

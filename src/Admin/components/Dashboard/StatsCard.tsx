@@ -7,18 +7,18 @@ interface StatsCardProps {
   icon: LucideIcon;
   color: 'blue' | 'green' | 'purple' | 'orange' | 'pink';
   subtitle?: string;
-  trend?: number;
+  trend?: number; // percent change, positive or negative
   loading?: boolean;
 }
 
-const StatsCard: React.FC<StatsCardProps> = ({ 
-  title, 
-  value, 
-  icon: Icon, 
-  color, 
-  subtitle, 
+const StatsCard: React.FC<StatsCardProps> = ({
+  title,
+  value,
+  icon: Icon,
+  color,
+  subtitle,
   trend,
-  loading = false 
+  loading = false,
 }) => {
   const gradients = {
     blue: 'from-blue-500 to-blue-600',
@@ -29,10 +29,11 @@ const StatsCard: React.FC<StatsCardProps> = ({
   };
 
   if (loading) {
+    // Skeleton loader
     return (
       <div className="bg-white rounded-2xl border border-gray-100 p-6 animate-pulse">
         <div className="flex items-center justify-between">
-          <div className="space-y-3">
+          <div className="space-y-3 w-3/4">
             <div className="h-4 bg-gray-200 rounded w-24"></div>
             <div className="h-8 bg-gray-200 rounded w-16"></div>
             <div className="h-3 bg-gray-200 rounded w-20"></div>
@@ -48,25 +49,24 @@ const StatsCard: React.FC<StatsCardProps> = ({
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold text-gray-600 mb-2">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mb-1">
-            {value.toLocaleString()}
-          </p>
+          <p className="text-3xl font-bold text-gray-900 mb-1">{value.toLocaleString()}</p>
           <div className="flex items-center space-x-2">
             {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
             {trend !== undefined && (
-              <div className={`flex items-center text-xs font-medium ${
-                trend >= 0 ? 'text-green-600' : 'text-red-600'
-              }`}>
+              <div
+                className={`flex items-center text-xs font-medium ${
+                  trend >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}
+              >
                 {trend >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                 <span className="ml-1">{Math.abs(trend)}%</span>
               </div>
             )}
           </div>
         </div>
-        <div className={`
-          p-4 rounded-2xl bg-gradient-to-br ${gradients[color]} text-white shadow-lg
-          group-hover:scale-110 transition-transform duration-300
-        `}>
+        <div
+          className={`p-4 rounded-2xl bg-gradient-to-br ${gradients[color]} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
+        >
           <Icon size={28} />
         </div>
       </div>
