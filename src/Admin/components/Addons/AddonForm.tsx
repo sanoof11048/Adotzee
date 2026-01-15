@@ -1,220 +1,230 @@
-import React, { useState, useEffect } from 'react';
-import { Addon, AddonCreateDTO, AddonUpdateDTO, Course, College } from '../../types';
-import { apiService } from '../../services/api';
-import toast from 'react-hot-toast';
-import { confirmAlert } from 'react-confirm-alert';
+import React, { useEffect, useState, useMemo, useRef } from "react";
+import toast from "react-hot-toast";
+import { apiService } from "../../services/api";
+import {
+  AddonCreateDTO,
+  AddonUpdateDTO,
+  AddonResponseDTO,
+  CourseResponseDTO,
+  CollegeResponseDTO,
+} from "../../../types";
+import { swalConfirm } from "../../../utils/swalConfirm";
+import Button from "../UI/Button";
+import Input from "../UI/Input";
+import { LucideSearch, X } from "lucide-react";
 
-interface AddonFormProps {
-  addon?: Addon;
+interface Props {
+  addon?: AddonResponseDTO;
   onSubmit: (data: AddonCreateDTO | AddonUpdateDTO) => void;
   onCancel: () => void;
   loading?: boolean;
 }
 
-const AddonForm: React.FC<AddonFormProps> = ({ addon, onSubmit, onCancel, loading = false }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    courseId: '',
-    collegeIds: [] as number[],
-  });
+const AddonForm: React.FC<Props> = ({ addon, onSubmit, onCancel, loading }) => {
+  const [name, setName] = useState("");
+  const [courseId, setCourseId] = useState<number | "">("");
+  const [collegeIds, setCollegeIds] = useState<number[]>([]);
+  const [courses, setCourses] = useState<CourseResponseDTO[]>([]);
+  const [colleges, setColleges] = useState<CollegeResponseDTO[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [colleges, setColleges] = useState<College[]>([]);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [courseSearch, setCourseSearch] = useState("");
+  const [collegeSearch, setCollegeSearch] = useState("");
+  const [showCourseDropdown, setShowCourseDropdown] = useState(false);
+  const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
+
+  const courseRef = useRef<HTMLDivElement>(null);
+  const collegeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchCourses();
-    fetchColleges();
+    Promise.all([apiService.getCourses(), apiService.getColleges()])
+      .then(([c, col]) => {
+        setCourses(c.data.data);
+        setColleges(col.data.data);
+      })
+      .catch(() => toast.error("Failed to load form data"));
   }, []);
 
   useEffect(() => {
-  if (addon) {
-    const matchedCourse = courses.find(c => c.name === addon.courseName);
-    const matchedCollegeIds = colleges
-      .filter(college => addon.collegeNames.includes(college.name))
-      .map(college => college.id);
+    if (!addon || !courses.length || !colleges.length) return;
+    const course = courses.find((c) => c.name === addon.courseName);
+    const selectedColleges = colleges
+      .filter((c) => addon.collegeNames.includes(c.name))
+      .map((c) => c.id);
+    setName(addon.name);
+    setCourseId(course?.id ?? "");
+    setCollegeIds(selectedColleges);
+    setCourseSearch(course?.name ?? "");
+  }, [addon, courses, colleges]);
 
-    setFormData({
-      name: addon.name,
-      courseId: matchedCourse ? String(matchedCourse.id) : '',
-      collegeIds: matchedCollegeIds,
-    });
-  }
-}, [addon, courses, colleges]);
-
-
-   const fetchCourses = async () => {
-    try {
-      const data = await apiService.getCourses();
-      setCourses(data.data);
-    } catch (error) {
-      toast.error('Failed to load courses');
-      console.error('Error fetching courses:', error);
-    }
-  };
-
-   const fetchColleges = async () => {
-    try {
-      const data = await apiService.getColleges();
-      setColleges(data.data);
-    } catch (error) {
-      toast.error('Failed to load colleges');
-      console.error('Error fetching colleges:', error);
-    }
-  };
-
- const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-    if (!formData.name.trim()) newErrors.name = 'Addon name is required';
-    if (!formData.courseId) newErrors.courseId = 'Course is required';
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length) {
-      toast.error('Please fix the form errors');
-    }
-
-    return Object.keys(newErrors).length === 0;
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!name.trim()) e.name = "Addon name is required";
+    if (!courseId) e.courseId = "Please select a course";
+    setErrors(e);
+    if (Object.keys(e).length) toast.error("Please fix the errors");
+    return !Object.keys(e).length;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
-    const submitData = {
-      name: formData.name,
-      courseId: parseInt(formData.courseId),
-      collegeIds: formData.collegeIds,
-    };
-
-    if (addon) {
-      onSubmit({ ...submitData, id: addon.id } as AddonUpdateDTO);
-      toast.success('Addon updated successfully');
-    } else {
-      onSubmit(submitData as AddonCreateDTO);
-      toast.success('Addon created successfully');
-    }
+    if (!validate()) return;
+    const payload = { name, courseId: Number(courseId), collegeIds };
+    onSubmit(addon ? { ...payload, id: addon.id } : payload);
   };
 
-
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+  const toggleCollege = (id: number) => {
+    setCollegeIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
   };
 
-  const handleCollegeToggle = (collegeId: number) => {
-    setFormData(prev => ({
-      ...prev,
-      collegeIds: prev.collegeIds.includes(collegeId)
-        ? prev.collegeIds.filter(id => id !== collegeId)
-        : [...prev.collegeIds, collegeId],
-    }));
-  };
-    const handleCancel = () => {
-    confirmAlert({
-      title: 'Cancel Changes?',
-      message: 'Are you sure you want to cancel? Unsaved changes will be lost.',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: onCancel,
-        },
-        {
-          label: 'No',
-        },
-      ],
+  const removeCollege = (id: number) => setCollegeIds((prev) => prev.filter((x) => x !== id));
+
+  const handleCancel = async () => {
+    const confirmed = await swalConfirm({
+      title: "Cancel changes?",
+      text: "Unsaved changes will be lost.",
+      confirmText: "Yes, cancel",
+      cancelText: "Stay",
+      icon: "question",
     });
+    if (confirmed) onCancel();
   };
 
+  const filteredCourses = useMemo(() => {
+    const q = courseSearch.toLowerCase();
+    return courses.filter((c) => c.name.toLowerCase().includes(q));
+  }, [courseSearch, courses]);
+
+  const filteredColleges = useMemo(() => {
+    const q = collegeSearch.toLowerCase();
+    return colleges
+      .filter((c) => !collegeIds.includes(c.id))
+      .filter((c) => c.name.toLowerCase().includes(q));
+  }, [collegeSearch, colleges, collegeIds]);
+
+  // Close dropdowns on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!courseRef.current?.contains(e.target as Node)) setShowCourseDropdown(false);
+      if (!collegeRef.current?.contains(e.target as Node)) setShowCollegeDropdown(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 mx-auto">
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-          Addon Name *
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.name ? 'border-red-500' : 'border-gray-300'
-          }`}
-          placeholder="Enter addon name"
+    <form onSubmit={handleSubmit} className="space-y-6 pe-8">
+      {/* Addon Name */}
+      <Input
+        label="Addon Name *"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        error={errors.name}
+        placeholder="Artificial Intelligence"
+      />
+
+      {/* Course Selection */}
+      <div className="relative" ref={courseRef}>
+        <Input
+          label="Select Course *"
+          value={courseSearch}
+          onChange={(e) => {
+            setCourseSearch(e.target.value);
+            setShowCourseDropdown(true);
+          }}
+          icon={LucideSearch}
+          iconPosition = "right"
+          error={errors.courseId}
+          onFocus={() => setShowCourseDropdown(true)}
         />
-        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="courseId" className="block text-sm font-medium text-gray-700 mb-1">
-          Course *
-        </label>
-        <select
-          id="courseId"
-          name="courseId"
-          value={formData.courseId}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.courseId ? 'border-red-500' : 'border-gray-300'
-          }`}
-        >
-          <option value="">Select a course</option>
-          {courses.map((course) => (
-            <option key={course.id} value={course.id}>
-              {course.name} ({course.type})
-            </option>
-          ))}
-        </select>
-        {errors.courseId && <p className="text-red-500 text-xs mt-1">{errors.courseId}</p>}
-      </div>
-
-      {colleges.length > 0 && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Available Colleges
-          </label>
-          <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3">
-            <div className="space-y-2">
-              {colleges.map((college) => (
-                <label key={college.id} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={formData.collegeIds.includes(college.id)}
-                    onChange={() => handleCollegeToggle(college.id)}
-                    className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">
-                    {college.name} - {college.location}
-                  </span>
-                </label>
-              ))}
-            </div>
+        {showCourseDropdown && filteredCourses.length > 0 && (
+          <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-xl mt-1 max-h-52 overflow-y-auto shadow-lg">
+            {filteredCourses.map((c) => (
+              <div
+                key={c.id}
+                className="px-4 py-2 hover:bg-blue-50 cursor-pointer flex justify-between transition"
+                onClick={() => {
+                  setCourseId(c.id);
+                  setCourseSearch(c.name);
+                  setShowCourseDropdown(false);
+                }}
+              >
+                <span>{c.name}</span>
+                <span className="text-gray-400 text-xs">{c.type}</span>
+              </div>
+            ))}
           </div>
-          <p className="text-xs text-gray-500 mt-1">
-            {formData.collegeIds.length} college(s) selected
-          </p>
-        </div>
-      )}
+        )}
+        {showCourseDropdown && filteredCourses.length === 0 && (
+          <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-xl mt-1 p-2 text-gray-400 text-sm">
+            No courses found
+          </div>
+        )}
+      </div>
 
-      <div className="flex justify-end space-x-3 pt-4">
-        <button
-          type="button"
-          onClick={handleCancel}
-          className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          disabled={loading}
-        >
+      {/* College Multi-select */}
+      <div className="relative" ref={collegeRef}>
+        <label className="text-sm font-semibold text-gray-700">Available Colleges</label>
+        {/* Selected Chips */}
+        <div className="flex flex-wrap gap-2 mb-2 mt-1">
+          {collegeIds.map((id) => {
+            const c = colleges.find((col) => col.id === id);
+            if (!c) return null;
+            return (
+              <div key={id} className="flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                {c.name}
+                <X size={14} className="cursor-pointer hover:text-blue-900" onClick={() => removeCollege(id)} />
+              </div>
+            );
+          })}
+        </div>
+
+        <Input
+          placeholder="Search colleges..."
+          value={collegeSearch}
+          onChange={(e) => {
+            setCollegeSearch(e.target.value);
+            setShowCollegeDropdown(true);
+          }}
+          icon={LucideSearch}
+          onFocus={() => setShowCollegeDropdown(true)}
+        />
+
+        {showCollegeDropdown && filteredColleges.length > 0 && (
+          <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-xl mt-1 max-h-52 overflow-y-auto shadow-lg">
+            {filteredColleges.map((c) => (
+              <div
+                key={c.id}
+                className="px-4 py-2 hover:bg-blue-50 cursor-pointer transition"
+                onClick={() => {
+                  toggleCollege(c.id);
+                  setCollegeSearch("");
+                  setShowCollegeDropdown(false);
+                }}
+              >
+                {c.name}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {showCollegeDropdown && filteredColleges.length === 0 && (
+          <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-xl mt-1 p-2 text-gray-400 text-sm">
+            No colleges found
+          </div>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="flex justify-end gap-3 pt-4 border-t">
+        <Button variant="outline" onClick={handleCancel}>
           Cancel
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          disabled={loading}
-        >
-          {loading ? 'Saving...' : addon ? 'Update Addon' : 'Create Addon'}
-        </button>
+        </Button>
+        <Button type="submit" loading={loading}>
+          {addon ? "Update Addon" : "Create Addon"}
+        </Button>
       </div>
     </form>
   );

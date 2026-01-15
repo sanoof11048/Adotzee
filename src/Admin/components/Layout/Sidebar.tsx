@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   GraduationCap,
@@ -6,95 +6,116 @@ import {
   Plus,
   Menu,
   X,
-  Sparkles
-} from 'lucide-react';
-import { useState } from 'react';
+  Sparkles,
+} from "lucide-react";
+import { useState } from "react";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'courses', label: 'Courses', icon: GraduationCap },
-    { id: 'colleges', label: 'Colleges', icon: Building2 },
-    { id: 'addons', label: 'Addons', icon: Plus },
+  const menu = [
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "courses", label: "Courses", icon: GraduationCap },
+    { id: "colleges", label: "Colleges", icon: Building2 },
+    { id: "addons", label: "Addons", icon: Plus },
   ];
 
   return (
     <>
-      {/* Mobile toggle button */}
+      {/* Mobile toggle */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md"
+        onClick={() => setOpen(!open)}
+        className="lg:hidden fixed top-5 left-5 z-50 bg-white border border-gray-200 p-2 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+        aria-label="Toggle menu"
       >
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
+        {open ? <X size={20} className="text-gray-700" /> : <Menu size={20} className="text-gray-700" />}
       </button>
 
       {/* Overlay */}
-      {isOpen && (
+      {open && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setIsOpen(false)}
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 bg-black/20 z-40 lg:hidden backdrop-blur-[2px]"
         />
       )}
 
       {/* Sidebar */}
-      <div className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl
-        transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-200 ease-in-out
-      `}>
-        <div className="flex flex-col h-full relative overflow-hidden">
+      <aside
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-64
+        bg-white border-r border-gray-100
+        transition-transform duration-300 ease-out
+        ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+      >
+        <div className="flex flex-col h-full">
+
           {/* Header */}
-          <div className="relative p-8 border-b border-slate-700/50">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
-                <Sparkles size={24} className="text-white" />
+          <div className="px-6 py-8 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-gray-900">
+                <Sparkles size={20} className="text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Adotzee</h1>
-                <p className="text-sm text-slate-300">College Management</p>
+                <h1 className="text-lg font-semibold text-gray-900">Adotzee</h1>
+                <p className="text-xs text-gray-500 mt-0.5">College Management</p>
               </div>
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 relative">
-            <ul className="space-y-6 p-2">
-              {menuItems.map(({ id, label, icon: Icon }) => {
+          <nav className="flex-1 px-4 py-6">
+            <ul className="space-y-2 p-0 list-none">
+              {menu.map(({ id, label, icon: Icon }) => {
                 const to = `/admin/${id}`;
-                const isActive = pathname.includes(id);
+                const active = pathname.startsWith(to);
 
                 return (
-                  <li key={id} className="list-none">
+                  <li key={id}>
                     <NavLink
                       to={to}
-                      onClick={() => setIsOpen(false)}
-                      className={({ isActive }) => `
-                        w-full flex items-center px-2 py-3.5 rounded-xl text-left transition-all duration-200 group
-                        ${isActive
-                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105'
-                          : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}
+                      onClick={() => setOpen(false)}
+                      className={`
+                        group flex items-center gap-4 px-3 py-2.5 rounded-lg
+                        transition-all duration-200
+                        ${
+                          active
+                            ? "bg-gray-900 text-white shadow-sm"
+                            : "text-gray-700 hover:bg-gray-50"
+                        }
                       `}
                     >
-                      <div className={`
-                        p-2 rounded-lg mr-3 transition-all duration-200
-                        ${isActive
-                          ? 'bg-white/20'
-                          : 'bg-slate-700/50 group-hover:bg-slate-600/50'}
-                      `}>
-                        <Icon size={18} />
-                      </div>
-                      <span className="font-medium">{label}</span>
+                      <Icon 
+                        size={18} 
+                        className={`transition-colors ${
+                          active ? "text-white" : "text-gray-500 group-hover:text-gray-700"
+                        }`}
+                      />
+
+                      <span className={`text-sm font-medium ${
+                        active ? "text-white" : "text-gray-700"
+                      }`}>
+                        {label}
+                      </span>
+
+                      {/* Active indicator dot */}
+                      {active && (
+                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white" />
+                      )}
                     </NavLink>
                   </li>
                 );
               })}
             </ul>
-            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-900 to-transparent pointer-events-none" />
           </nav>
+
+          {/* Footer */}
+          <div className="px-6 py-4 border-t border-gray-100">
+            <p className="text-xs text-gray-400 text-center">
+              © {new Date().getFullYear()} Adotzee
+            </p>
+          </div>
         </div>
-      </div>
+      </aside>
     </>
   );
 };

@@ -1,143 +1,203 @@
-import React, { useState, useEffect } from 'react';
-import { College, CollegeCreateDTO, CollegeUpdateDTO } from '../../types';
-import toast from 'react-hot-toast';
-import { confirmAlert } from 'react-confirm-alert';
+import { useState } from "react";
+import LocationModal from "./LocationModal";
+import { MapPin, XCircle, CheckCircle } from "lucide-react";
 
-interface CollegeFormProps {
-  college?: College;
-  onSubmit: (data: CollegeCreateDTO | CollegeUpdateDTO) => void;
+interface Props {
+  college?: any;
+  onSubmit: (data: any) => void;
   onCancel: () => void;
   loading?: boolean;
 }
 
-const CollegeForm: React.FC<CollegeFormProps> = ({ college, onSubmit, onCancel, loading = false }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    location: '',
-  });
+export default function CollegeForm({
+  college,
+  onSubmit,
+  onCancel,
+  loading,
+}: Props) {
+  // Required
+  const [name, setName] = useState(college?.name || "");
+  const [address, setAddress] = useState(college?.address || "");
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  // Optional location
+  const [latitude, setLatitude] = useState<number | null>(
+    college?.latitude ?? null
+  );
+  const [longitude, setLongitude] = useState<number | null>(
+    college?.longitude ?? null
+  );
 
-  useEffect(() => {
-    if (college) {
-      setFormData({
-        name: college.name,
-        location: college.location,
-      });
-    }
-  }, [college]);
+  const [googleMapsUrl, setGoogleMapsUrl] = useState<string>(
+    college?.googleMapsUrl || ""
+  );
 
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
+  const [isRecommended, setIsRecommended] = useState<boolean>(
+    college?.isRecommended ?? false
+  );
 
-    if (!formData.name.trim()) newErrors.name = 'College name is required';
-    if (!formData.location.trim()) newErrors.location = 'Location is required';
+  const [openMap, setOpenMap] = useState(false);
 
-    setErrors(newErrors);
+  /* ---------------- Google Maps URL Parser ---------------- */
 
-    if (Object.keys(newErrors).length > 0) {
-      toast.error('Please fix the form errors');
-    }
+  const extractLatLngFromGoogleUrl = (url: string) => {
+    const match =
+      url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) ||
+      url.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
 
-    return Object.keys(newErrors).length === 0;
+    if (!match) return;
+
+    setLatitude(Number(match[1]));
+    setLongitude(Number(match[2]));
   };
+
+  /* ---------------- Clear Location ---------------- */
+
+  const clearLocation = () => {
+    setLatitude(null);
+    setLongitude(null);
+    setGoogleMapsUrl("");
+  };
+
+  /* ---------------- Submit ---------------- */
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      const submitData = college
-        ? ({ ...formData, id: college.id } as CollegeUpdateDTO)
-        : (formData as CollegeCreateDTO);
+    const payload: any = {
+      name,
+      address,
+      isRecommended,
+      addonIds: [],
+    };
 
-      onSubmit(submitData);
-      toast.success(`College ${college ? 'updated' : 'added'} successfully`);
+    if (latitude !== null && longitude !== null) {
+      payload.latitude = latitude;
+      payload.longitude = longitude;
     }
+
+    if (googleMapsUrl) payload.googleMapsUrl = googleMapsUrl;
+    if (college?.id) payload.id = college.id;
+
+    onSubmit(payload);
   };
 
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-    const handleCancelClick = () => {
-    confirmAlert({
-      title: 'Cancel Confirmation',
-      message: 'Are you sure you want to cancel?',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: onCancel,
-        },
-        {
-          label: 'No',
-          onClick: () => {},
-        },
-      ],
-    });
-  };
+  const hasLocation = latitude !== null && longitude !== null;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-          College Name *
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.name ? 'border-red-500' : 'border-gray-300'
-          }`}
-          placeholder="Enter college name"
-        />
-        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-      </div>
+    <div className="bg-white rounded-xl shadow-lg p-6 max-w-lg mx-auto">
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        {college ? "Edit College" : "Add New College"}
+      </h2>
 
-      <div>
-        <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-          Location *
-        </label>
-        <input
-          type="text"
-          id="location"
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.location ? 'border-red-500' : 'border-gray-300'
-          }`}
-          placeholder="Enter college location"
-        />
-        {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location}</p>}
-      </div>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Name */}
+        <div>
+          <label className="font-medium">
+            College Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="border p-3 rounded-lg w-full"
+          />
+        </div>
 
-      <div className="flex justify-end space-x-3 pt-4">
-        <button
-          type="button"
-          onClick={handleCancelClick}
-          className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          disabled={loading}
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          disabled={loading}
-        >
-          {loading ? 'Saving...' : college ? 'Update College' : 'Create College'}
-        </button>
-      </div>
-    </form>
+        {/* Address */}
+        <div>
+          <label className="font-medium">
+            Address <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+            className="border p-3 rounded-lg w-full h-20 resize-none"
+          />
+        </div>
+
+        {/* Google Maps URL */}
+        <div>
+          <label className="font-medium">Google Maps Link (optional)</label>
+          <input
+            value={googleMapsUrl}
+            onChange={(e) => {
+              setGoogleMapsUrl(e.target.value);
+              extractLatLngFromGoogleUrl(e.target.value);
+            }}
+            placeholder="Paste Google Maps URL"
+            className="border p-3 rounded-lg w-full"
+          />
+        </div>
+
+        {/* Location Status */}
+        {hasLocation ? (
+          <div className="flex items-center justify-between bg-green-50 border border-green-200 p-3 rounded-lg">
+            <div className="flex items-center gap-2 text-green-700">
+              <CheckCircle size={18} />
+              <span className="font-medium">Location picked from map</span>
+            </div>
+            <button
+              type="button"
+              onClick={clearLocation}
+              className="text-red-600 hover:underline"
+            >
+              Clear
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setOpenMap(true)}
+            className="flex items-center gap-2 w-full bg-blue-600 text-white px-4 py-3 rounded-lg"
+          >
+            <MapPin size={20} />
+            Pick Location from Map
+          </button>
+        )}
+
+        {/* Recommended */}
+        <div className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            checked={isRecommended}
+            onChange={(e) => setIsRecommended(e.target.checked)}
+          />
+          <label className="font-medium">Recommended</label>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 bg-green-600 text-white py-3 rounded-lg"
+          >
+            {loading ? "Saving..." : "Save College"}
+          </button>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="flex-1 bg-gray-200 py-3 rounded-lg"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      {/* Map Modal */}
+      {openMap && (
+        <LocationModal
+          isOpen={openMap}
+          onClose={() => setOpenMap(false)}
+          lat={latitude ?? 11.2588}
+          lng={longitude ?? 75.7804}
+          onChange={(lat, lng) => {
+            setLatitude(lat);
+            setLongitude(lng);
+          }}
+        />
+      )}
+    </div>
   );
-};
-
-export default CollegeForm;
+}
