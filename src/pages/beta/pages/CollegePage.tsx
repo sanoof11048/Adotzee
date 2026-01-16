@@ -30,7 +30,7 @@ const CollegeCard = ({ college }: { college: College }) => {
   return (
     <div className="relative w-full bg-white rounded-xl shadow-md border p-4 transition-transform hover:scale-[1.01]">
       {college.isRecommended && (
-        <div className="absolute -top-2 -left-2 bg-gradient-to-r from-yellow-500 to-amber-500 px-3 py-1 rounded-lg flex items-center gap-1 text-white text-xs font-bold shadow-md">
+        <div className="absolute -top-2 -left-2 bg-linear-to-r from-yellow-500 to-amber-500 px-3 py-1 rounded-lg flex items-center gap-1 text-white text-xs font-bold shadow-md">
           <FontAwesomeIcon icon={faStar} />
           Adotzee's Choice
         </div>
@@ -39,7 +39,7 @@ const CollegeCard = ({ college }: { college: College }) => {
       <div className="flex flex-col md:flex-row items-stretch gap-4">
         {/* Left: Icon & Info */}
         <div className="flex items-center flex-1">
-          <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 rounded-full text-white mr-4">
+          <div className="w-12 h-12 flex items-center justify-center bg-linear-to-br from-blue-500 to-blue-600 rounded-full text-white mr-4">
             <FontAwesomeIcon icon={faGraduationCap} className="text-lg" />
           </div>
           <div>
@@ -67,7 +67,7 @@ const CollegeCard = ({ college }: { college: College }) => {
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg transition hover:from-blue-700 hover:to-blue-800"
+            className="inline-flex items-center justify-center px-4 py-2 bg-linear-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg transition hover:from-blue-700 hover:to-blue-800"
           >
             <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
             Fees & Details
@@ -104,7 +104,7 @@ const CollegePage = () => {
       <Back />
       <Navbar />
 
-      <div className="min-h-screen bg-gradient-to-br from-[#f4f7fa] to-[#e4e9f2] pt-20 px-4 flex flex-col items-center">
+      <div className="min-h-screen bg-linear-to-br from-[#f4f7fa] to-[#e4e9f2] pt-20 px-4 flex flex-col items-center">
         <h1 className="text-2xl md:text-4xl font-extrabold text-gray-900 text-center mb-6">
           Available Colleges
         </h1>

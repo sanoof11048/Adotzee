@@ -3,10 +3,10 @@ import { Plus, Edit, Trash2, Search, MapPin } from 'lucide-react';
 import { apiService } from '../../services/api';
 import Modal from '../UI/Modal';
 import CollegeForm from './CollegeForm';
-import LinearLoading from '../../../components/common/LinearLoading';
 import toast from 'react-hot-toast';
 import Swal from "sweetalert2";
 import { CollegeCreateDTO, CollegeResponseDTO, CollegeUpdateDTO } from '../../../types';
+import LinearLoading from '../../../components/common/LinearLoading';
 
 const CollegeManagement: React.FC = () => {
   const [colleges, setColleges] = useState<CollegeResponseDTO[]>([]);
