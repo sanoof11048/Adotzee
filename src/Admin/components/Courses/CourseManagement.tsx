@@ -75,7 +75,7 @@ const CourseManagement: React.FC = () => {
   if (loading) return <LinearLoading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-gray-50 to-slate-100 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header Section */}
@@ -115,7 +115,7 @@ const CourseManagement: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gradient-to-r from-gray-50 to-gray-100/50 border-b border-gray-200">
+                <tr className="bg-linear-to-r from-gray-50 to-gray-100/50 border-b border-gray-200">
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Course Name</th>
                   <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Type</th>
                   <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Stream</th>

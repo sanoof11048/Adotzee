@@ -87,7 +87,7 @@ const Dashboard: React.FC = () => {
             <Button size="sm">90D</Button>
           </div>
         </div>
-        <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl flex items-center justify-center">
+        <div className="h-64 bg-linear-to-br from-blue-50 to-purple-50 rounded-xl flex items-center justify-center">
           <div className="text-center">
             <BarChart3 size={48} className="text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 font-medium">Analytics Chart Coming Soon</p>

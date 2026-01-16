@@ -65,7 +65,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
           </div>
         </div>
         <div
-          className={`p-4 rounded-2xl bg-gradient-to-br ${gradients[color]} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
+          className={`p-4 rounded-2xl bg-linear-to-br ${gradients[color]} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
         >
           <Icon size={28} />
         </div>

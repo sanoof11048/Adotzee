@@ -128,7 +128,7 @@ const AddonManagement: React.FC = () => {
   if (loading) return <LinearLoading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/20 to-slate-100 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-purple-50/20 to-slate-100 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header */}
@@ -177,7 +177,7 @@ const AddonManagement: React.FC = () => {
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3 flex-1">
-                    <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-md">
+                    <div className="p-2.5 bg-linear-to-br from-purple-500 to-purple-600 rounded-xl shadow-md">
                       <Tag className="text-white" size={18} />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -231,7 +231,7 @@ const AddonManagement: React.FC = () => {
                       {displayColleges?.map((college, i) => (
                         <div
                           key={i}
-                          className="text-xs bg-gradient-to-r from-gray-50 to-gray-100/50 text-gray-700 rounded-lg px-3 py-2 border border-gray-200/50 font-medium"
+                          className="text-xs bg-linear-to-r from-gray-50 to-gray-100/50 text-gray-700 rounded-lg px-3 py-2 border border-gray-200/50 font-medium"
                         >
                           {college}
                         </div>

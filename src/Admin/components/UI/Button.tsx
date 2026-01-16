@@ -27,11 +27,11 @@ const Button: React.FC<ButtonProps> = ({
 
   const variants: Record<string, string> = {
     primary:
-      'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:from-blue-600 hover:to-blue-700 border border-blue-400/20',
+      'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:from-blue-600 hover:to-blue-700 border border-blue-400/20',
     secondary:
       'bg-white/80 backdrop-blur-2xl text-gray-900 shadow-sm shadow-gray-200/50 hover:shadow-md hover:shadow-gray-300/50 hover:bg-white/90 border border-gray-200/50',
     danger:
-      'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:from-red-600 hover:to-red-700 border border-red-400/20',
+      'bg-linear-to-br from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:from-red-600 hover:to-red-700 border border-red-400/20',
     ghost:
       'bg-transparent text-blue-600 hover:bg-blue-50/80 backdrop-blur-xl active:bg-blue-100/60 border border-transparent hover:border-blue-100',
     outline:
@@ -73,7 +73,7 @@ const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {/* Glass morphism overlay effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
       
       {/* Content */}
       <span className="relative flex items-center justify-center gap-inherit">
