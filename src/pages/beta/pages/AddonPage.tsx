@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { toSlug } from "../../../utils/slug";
 import { useCourseFinderContext } from "../hooks/CourseFinderContext";
+import { useNavigate } from "react-router-dom";
+import { toSlug } from "../../../utils/slug";
 
 const AddonPage = () => {
-  const { type, stream, course } = useParams();
   const navigate = useNavigate();
-  const { addons, loading, selectAddon } = useCourseFinderContext();
+  const { selection, addons, loading, selectAddon } = useCourseFinderContext();
+
+  if (!selection.course) navigate("/explore");
 
   return (
     <>
@@ -20,8 +20,8 @@ const AddonPage = () => {
             <div
               key={addon.id}
               onClick={() => {
-                selectAddon(addon); // save in context
-                navigate(`${toSlug(addon.name)}/colleges`); // relative path
+                selectAddon(addon);
+                navigate(`${toSlug(addon.name)}/colleges`);
               }}
               className="p-5 bg-white rounded-lg shadow cursor-pointer hover:border-blue-500 border"
             >

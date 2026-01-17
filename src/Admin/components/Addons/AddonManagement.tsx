@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Plus, Edit, Trash2, Search, Tag, GraduationCap, Building2, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Edit, Trash2, Search, GraduationCap, Building2, ChevronDown, ChevronUp, Tag } from "lucide-react";
 import toast from "react-hot-toast";
 import Modal from "../UI/Modal";
-import LinearLoading from "../../../components/common/LinearLoading";
 import AddonForm from "./AddonForm";
 import { apiService } from "../../services/api";
 import { AddonResponseDTO } from "../../../types";
 import { swalConfirm } from "../../../utils/swalConfirm";
 import Button from "../UI/Button";
+import LinearLoading from "../../../components/common/LinearLoading";
 
 const AddonManagement: React.FC = () => {
   const [addons, setAddons] = useState<AddonResponseDTO[]>([]);
@@ -178,10 +178,10 @@ const AddonManagement: React.FC = () => {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3 flex-1">
                     <div className="p-2.5 bg-linear-to-br from-purple-500 to-purple-600 rounded-xl shadow-md">
-                      <Tag className="text-white" size={18} />
+                      <Tag size={18} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-1 break-words">
+                      <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-1 wrap-break-word">
                         {addon.name}
                       </h3>
                     </div>
@@ -208,7 +208,7 @@ const AddonManagement: React.FC = () => {
                 {/* Course Info */}
                 <div className="mb-4 pb-4 border-b border-gray-100">
                   <div className="flex items-center gap-2 text-sm">
-                    <GraduationCap size={16} className="text-gray-500 flex-shrink-0" />
+                    <GraduationCap size={16} className="text-gray-500 flex shrink-0" />
                     <span className="text-gray-600">Course:</span>
                     <span className="font-medium text-gray-900 truncate">{addon.courseName}</span>
                   </div>

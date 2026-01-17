@@ -2,12 +2,17 @@
 import { Outlet } from "react-router-dom";
 import StepHeader from "./components/StepHeader";
 import BreadcrumbNav from "./components/BreadcrumbNav";
+import Navbar from "../../components/common/Navbar";
+import Back from "../../components/common/Back";
 
 const ExploreLayout = () => {
-  return (
+  return (<>
+    <Back />
+    <Navbar />
+
     <div className="flex">
       <div className="flex-1 p-4">
-        {/* Optional: Step header showing progress */}
+
         <StepHeader />
 
         {/* Breadcrumb navigation */}
@@ -19,6 +24,7 @@ const ExploreLayout = () => {
         </div>
       </div>
     </div>
+  </>
   );
 };
 

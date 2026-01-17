@@ -104,3 +104,13 @@ export interface AddonResponseDTO {
 /** ========================= OPTIONAL UTILITY TYPES ========================= */
 export type CourseType = 'UG' | 'PG';
 export type StreamType = 'Science' | 'Arts' | 'Commerce' | string;
+
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline' | 'minimal' | 'soft' | 'subtle' | 'muted' | 'text';
+  size?: 'sm' | 'md' | 'lg';
+  icon?: React.ElementType;
+  iconPosition?: 'left' | 'right';
+  loading?: boolean;
+  fullWidth?: boolean;
+}
