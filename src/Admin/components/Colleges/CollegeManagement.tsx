@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import Swal from "sweetalert2";
 import { CollegeCreateDTO, CollegeResponseDTO, CollegeUpdateDTO } from '../../../types';
 import LinearLoading from '../../../components/common/LinearLoading';
+import Button from '../UI/Button';
 
 const CollegeManagement: React.FC = () => {
   const [colleges, setColleges] = useState<CollegeResponseDTO[]>([]);
@@ -69,43 +70,43 @@ const CollegeManagement: React.FC = () => {
     }
   };
 
-const handleDeleteCollege = async (id: number) => {
-  const result = await Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel',
-    reverseButtons: true,
-  });
+  const handleDeleteCollege = async (id: number) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    });
 
-  if (result.isConfirmed) {
-    try {
-      await apiService.deleteCollege(id);
-      toast.success('College deleted successfully');
-      await fetchColleges();
-      Swal.fire('Deleted!', 'The college has been deleted.', 'success');
-    } catch (err) {
-      toast.error('Failed to delete college');
-      console.error(err);
-      Swal.fire('Error', 'Failed to delete the college.', 'error');
+    if (result.isConfirmed) {
+      try {
+        await apiService.deleteCollege(id);
+        toast.success('College deleted successfully');
+        await fetchColleges();
+        Swal.fire('Deleted!', 'The college has been deleted.', 'success');
+      } catch (err) {
+        toast.error('Failed to delete college');
+        console.error(err);
+        Swal.fire('Error', 'Failed to delete the college.', 'error');
+      }
     }
-  }
-};
+  };
 
-    const handleSubmit = async (data: CollegeCreateDTO | CollegeUpdateDTO) => {
-  if ('id' in data) {
-    // CollegeUpdateDTO
-    await handleUpdateCollege(data);
-  } else {
-    // CollegeCreateDTO
-    await handleCreateCollege(data);
-    
-  }
-};
+  const handleSubmit = async (data: CollegeCreateDTO | CollegeUpdateDTO) => {
+    if ('id' in data) {
+      // CollegeUpdateDTO
+      await handleUpdateCollege(data);
+    } else {
+      // CollegeCreateDTO
+      await handleCreateCollege(data);
+
+    }
+  };
 
   const openCreateModal = () => {
     setEditingCollege(null);
@@ -136,13 +137,15 @@ const handleDeleteCollege = async (id: number) => {
           <h1 className="text-2xl font-bold text-gray-900">College Management</h1>
           <p className="text-gray-600 mt-1">Manage educational institutions and their details</p>
         </div>
-        <button
+        <Button
           onClick={openCreateModal}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          icon={Plus}
+          variant="primary"
+          size="md"
         >
-          <Plus size={20} className="mr-2" />
           Add College
-        </button>
+        </Button>
+
       </div>
 
       {/* Search */}
@@ -156,6 +159,7 @@ const handleDeleteCollege = async (id: number) => {
             onChange={e => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
         </div>
       </div>
 
@@ -166,12 +170,21 @@ const handleDeleteCollege = async (id: number) => {
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-lg font-semibold text-gray-900 truncate">{college.name}</h3>
               <div className="flex space-x-2">
-                <button onClick={() => openEditModal(college)} className="text-blue-600 bg-transparent hover:text-blue-900 p-1 rounded">
-                  <Edit size={16} />
-                </button>
-                <button onClick={() => handleDeleteCollege(college.id)} className="text-red-600 bg-transparent hover:text-red-900 p-1 rounded">
-                  <Trash2 size={16} />
-                </button>
+                <Button
+                  onClick={() => openEditModal(college)}
+                  icon={Edit}
+                  variant="ghost"
+                  size="sm"
+                />
+
+                <Button
+                  onClick={() => handleDeleteCollege(college.id)}
+                  icon={Trash2}
+                  variant="ghost"
+                  size="sm"
+                  className="text-red-600 hover:bg-red-50"
+                />
+
               </div>
             </div>
 

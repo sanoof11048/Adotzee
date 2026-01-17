@@ -1,6 +1,6 @@
-// ./Context/CourseFinderContext.tsx
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useRef, useEffect } from "react";
 import { apiService } from "../../../Admin/services/api";
+import { useNavigate } from "react-router-dom";
 
 interface Selection {
   type: string;
@@ -21,11 +21,10 @@ interface CourseFinderContextType {
   addons: any[];
   colleges: any[];
   loading: boolean;
+  reset: () => void;
 }
 
-const CourseFinderContext = createContext<CourseFinderContextType | undefined>(
-  undefined
-);
+const CourseFinderContext = createContext<CourseFinderContextType | undefined>(undefined);
 
 export const CourseFinderProvider = ({ children }: { children: React.ReactNode }) => {
   const [selection, setSelection] = useState<Selection>({
@@ -43,21 +42,87 @@ export const CourseFinderProvider = ({ children }: { children: React.ReactNode }
   const types = ["UG", "PG"];
   const streams = ["Science", "Commerce", "Humanities"];
 
-  // Simple cache
-  const cache: Record<string, any> = {};
+  const cacheRef = useRef<{ courses: Record<string, any[]>; addons: Record<string, any[]>; colleges: Record<string, any[]> }>({
+    courses: {},
+    addons: {},
+    colleges: {},
+  });
 
-  const handleApi = async (key: string, fn: () => Promise<any>, setter: (data: any) => void) => {
+  const navigate = useNavigate();
+
+  // Load selection & cache from localStorage
+  useEffect(() => {
+    const savedSelection = localStorage.getItem("courseFinderSelection");
+    const savedCache = localStorage.getItem("courseFinderCache");
+
+    if (savedCache) cacheRef.current = JSON.parse(savedCache);
+    if (savedSelection) {
+      const sel = JSON.parse(savedSelection);
+      setSelection(sel);
+
+      // Prefetch data
+      if (sel.type && sel.stream) fetchCourses(sel.type, sel.stream, false);
+      if (sel.course) fetchAddons(sel.course.id, false);
+      if (sel.addon) fetchColleges(sel.addon.id, false);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("courseFinderSelection", JSON.stringify(selection));
+  }, [selection]);
+
+  useEffect(() => {
+    localStorage.setItem("courseFinderCache", JSON.stringify(cacheRef.current));
+  }, [cacheRef.current]);
+
+  const fetchCourses = async (type: string, stream: string, setSel = true) => {
+    const key = `${type}-${stream}`;
+    if (cacheRef.current.courses[key]) {
+      setCourses(cacheRef.current.courses[key]);
+      return;
+    }
     setLoading(true);
     try {
-      if (cache[key]) {
-        setter(cache[key]);
-      } else {
-        const res = await fn();
-        cache[key] = res.data.data;
-        setter(res.data.data);
-      }
+      const res = await apiService.filterCourses(type, stream);
+      cacheRef.current.courses[key] = res.data.data;
+      setCourses(res.data.data);
     } finally {
       setLoading(false);
+      if (setSel) setSelection((prev) => ({ ...prev, type, stream, course: null, addon: null }));
+    }
+  };
+
+  const fetchAddons = async (courseId: number, setSel = true) => {
+    const key = `${courseId}`;
+    if (cacheRef.current.addons[key]) {
+      setAddons(cacheRef.current.addons[key]);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await apiService.getAddonsByCourse(courseId);
+      cacheRef.current.addons[key] = res.data.data;
+      setAddons(res.data.data);
+    } finally {
+      setLoading(false);
+      if (setSel) setSelection((prev) => ({ ...prev, course: { id: courseId }, addon: null }));
+    }
+  };
+
+  const fetchColleges = async (addonId: number, setSel = true) => {
+    const key = `${addonId}`;
+    if (cacheRef.current.colleges[key]) {
+      setColleges(cacheRef.current.colleges[key]);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await apiService.getCollegesByAddon(addonId);
+      cacheRef.current.colleges[key] = res.data.data;
+      setColleges(res.data.data);
+    } finally {
+      setLoading(false);
+      if (setSel) setSelection((prev) => ({ ...prev, addon: { id: addonId } }));
     }
   };
 
@@ -66,24 +131,32 @@ export const CourseFinderProvider = ({ children }: { children: React.ReactNode }
     setCourses([]);
     setAddons([]);
     setColleges([]);
+    navigate('/explore')
   };
 
   const setStream = (stream: string) => {
+    if (!selection.type) return;
     setSelection((prev) => ({ ...prev, stream }));
-    handleApi(`courses-${selection.type}-${stream}`, () =>
-      apiService.filterCourses(selection.type, stream), 
-      setCourses
-    );
+    fetchCourses(selection.type, stream);
   };
 
   const selectCourse = (course: any) => {
-    setSelection((prev) => ({ ...prev, course }));
-    handleApi(`addons-${course.id}`, () => apiService.getAddonsByCourse(course.id), setAddons);
+    setSelection((prev) => ({ ...prev, course, addon: null }));
+    fetchAddons(course.id);
   };
 
   const selectAddon = (addon: any) => {
     setSelection((prev) => ({ ...prev, addon }));
-    handleApi(`colleges-${addon.id}`, () => apiService.getCollegesByAddon(addon.id), setColleges);
+    fetchColleges(addon.id);
+  };
+
+  const reset = () => {
+    setSelection({ type: "", stream: "", course: null, addon: null });
+    setCourses([]);
+    setAddons([]);
+    setColleges([]);
+    localStorage.clear();
+    navigate
   };
 
   return (
@@ -100,6 +173,7 @@ export const CourseFinderProvider = ({ children }: { children: React.ReactNode }
         addons,
         colleges,
         loading,
+        reset,
       }}
     >
       {children}

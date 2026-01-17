@@ -86,7 +86,7 @@ const CourseForm: React.FC<CourseFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 pe-10">
       <Input
         label="Course Name *"
         name="name"
@@ -106,9 +106,12 @@ const CourseForm: React.FC<CourseFormProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Select
           label="Course Type *"
-          name="type"
           value={formData.type}
-          onChange={handleChange}
+          onChange={(value) => {
+            const typedValue = value as "UG" | "PG";
+            setFormData(p => ({ ...p, type: typedValue }));
+            if (errors.type) setErrors(p => ({ ...p, type: "" }));
+          }}
           error={errors.type}
           options={[
             { value: "UG", label: "Undergraduate (UG)" },
@@ -118,9 +121,11 @@ const CourseForm: React.FC<CourseFormProps> = ({
 
         <Select
           label="Stream *"
-          name="stream"
           value={formData.stream}
-          onChange={handleChange}
+          onChange={(value) => {
+            setFormData(p => ({ ...p, stream: value }));
+            if (errors.stream) setErrors(p => ({ ...p, stream: "" }));
+          }}
           error={errors.stream}
           options={[
             { value: "Science", label: "Science" },

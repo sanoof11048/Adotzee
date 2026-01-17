@@ -115,7 +115,7 @@ const AddonForm: React.FC<Props> = ({ addon, onSubmit, onCancel, loading }) => {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 pe-8">
+    <form onSubmit={handleSubmit} className="space-y-6 pe-10">
       {/* Addon Name */}
       <Input
         label="Addon Name *"

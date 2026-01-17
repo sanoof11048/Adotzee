@@ -6,8 +6,9 @@ import {
   Plus,
   Menu,
   X,
-  Sparkles,
 } from "lucide-react";
+import logo from "../../../assets/hat.png";
+import logoText from "../../../assets/textlogo.png";
 import { useState } from "react";
 
 const Sidebar = () => {
@@ -50,17 +51,27 @@ const Sidebar = () => {
         <div className="flex flex-col h-full">
 
           {/* Header */}
-          <div className="px-6 py-8 border-b border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-gray-900">
-                <Sparkles size={20} className="text-white" />
-              </div>
-              <div>
-                <h1 className="text-lg font-semibold text-gray-900">Adotzee</h1>
-                <p className="text-xs text-gray-500 mt-0.5">College Management</p>
-              </div>
-            </div>
-          </div>
+<div className="px-6 py-8 border-b border-gray-100">
+  <div className="flex items-center gap-3">
+    <div className=" rounded-lg -mt-5 flex items-center justify-center">
+      <img
+        src={logo}
+        alt="Adotzee Logo"
+        className="h-16 w-auto object-contain"
+      />
+    </div>
+     <div className="flex flex-col">
+      <img
+        src={logoText}
+        alt="Adotzee Text Logo"
+        className="h-6 w-auto object-contain"
+      />
+      <p className="text-xs text-gray-500 mt-0">College Management</p>
+    </div>
+  </div>
+</div>
+
+
 
           {/* Navigation */}
           <nav className="flex-1 px-4 py-6">

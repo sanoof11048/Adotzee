@@ -23,6 +23,7 @@ import { CourseFinderProvider } from "./pages/beta/hooks/CourseFinderContext";
 import { CourseProvider } from "./Context/courseData";
 import NotFoundPage from "./pages/404/404";
 import CollegeList from "./pages/streams/CollegeList";
+import { DemoApp } from "./Admin/components/UI/Button";
 
 // Lazy imports
 const Home = lazy(() => import("./pages/Home"));
@@ -48,6 +49,7 @@ function App() {
                 {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/science" element={<Science />} />
+                <Route path="/demo" element={<DemoApp />} />
                 <Route path="/commerce" element={<Commerce />} />
                 <Route path="/humanities" element={<Humanities />} />
                 <Route path="/college/:addonName" element={<CollegeList />} />

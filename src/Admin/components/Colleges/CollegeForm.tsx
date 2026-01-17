@@ -1,6 +1,8 @@
 import { useState } from "react";
 import LocationModal from "./LocationModal";
-import { MapPin, XCircle, CheckCircle } from "lucide-react";
+import { MapPin, CheckCircle } from "lucide-react";
+import Button from "../UI/Button";
+import Input from "../UI/Input"; // <-- custom input
 
 interface Props {
   college?: any;
@@ -15,29 +17,13 @@ export default function CollegeForm({
   onCancel,
   loading,
 }: Props) {
-  // Required
   const [name, setName] = useState(college?.name || "");
   const [address, setAddress] = useState(college?.address || "");
-
-  // Optional location
-  const [latitude, setLatitude] = useState<number | null>(
-    college?.latitude ?? null
-  );
-  const [longitude, setLongitude] = useState<number | null>(
-    college?.longitude ?? null
-  );
-
-  const [googleMapsUrl, setGoogleMapsUrl] = useState<string>(
-    college?.googleMapsUrl || ""
-  );
-
-  const [isRecommended, setIsRecommended] = useState<boolean>(
-    college?.isRecommended ?? false
-  );
-
+  const [latitude, setLatitude] = useState<number | null>(college?.latitude ?? null);
+  const [longitude, setLongitude] = useState<number | null>(college?.longitude ?? null);
+  const [googleMapsUrl, setGoogleMapsUrl] = useState<string>(college?.googleMapsUrl || "");
+  const [isRecommended, setIsRecommended] = useState<boolean>(college?.isRecommended ?? false);
   const [openMap, setOpenMap] = useState(false);
-
-  /* ---------------- Google Maps URL Parser ---------------- */
 
   const extractLatLngFromGoogleUrl = (url: string) => {
     const match =
@@ -50,15 +36,11 @@ export default function CollegeForm({
     setLongitude(Number(match[2]));
   };
 
-  /* ---------------- Clear Location ---------------- */
-
   const clearLocation = () => {
     setLatitude(null);
     setLongitude(null);
     setGoogleMapsUrl("");
   };
-
-  /* ---------------- Submit ---------------- */
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,46 +71,36 @@ export default function CollegeForm({
         {college ? "Edit College" : "Add New College"}
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Name */}
-        <div>
-          <label className="font-medium">
-            College Name <span className="text-red-500">*</span>
-          </label>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="border p-3 rounded-lg w-full"
-          />
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-5 pe-10">
+        {/* College Name */}
+        <Input
+          label="College Name"
+          placeholder="Enter college name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
 
         {/* Address */}
-        <div>
-          <label className="font-medium">
-            Address <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-            className="border p-3 rounded-lg w-full h-20 resize-none"
-          />
-        </div>
+        <Input
+          label="Address"
+          placeholder="Enter address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+          className="h-20"
+        />
 
         {/* Google Maps URL */}
-        <div>
-          <label className="font-medium">Google Maps Link (optional)</label>
-          <input
-            value={googleMapsUrl}
-            onChange={(e) => {
-              setGoogleMapsUrl(e.target.value);
-              extractLatLngFromGoogleUrl(e.target.value);
-            }}
-            placeholder="Paste Google Maps URL"
-            className="border p-3 rounded-lg w-full"
-          />
-        </div>
+        <Input
+          label="Google Maps Link (optional)"
+          placeholder="Paste Google Maps URL"
+          value={googleMapsUrl}
+          onChange={(e) => {
+            setGoogleMapsUrl(e.target.value);
+            extractLatLngFromGoogleUrl(e.target.value);
+          }}
+        />
 
         {/* Location Status */}
         {hasLocation ? (
@@ -137,23 +109,20 @@ export default function CollegeForm({
               <CheckCircle size={18} />
               <span className="font-medium">Location picked from map</span>
             </div>
-            <button
-              type="button"
-              onClick={clearLocation}
-              className="text-red-600 hover:underline"
-            >
+
+            <Button variant="ghost" size="sm" onClick={clearLocation}>
               Clear
-            </button>
+            </Button>
           </div>
         ) : (
-          <button
+          <Button
             type="button"
             onClick={() => setOpenMap(true)}
-            className="flex items-center gap-2 w-full bg-blue-600 text-white px-4 py-3 rounded-lg"
+            icon={MapPin}
+            fullWidth
           >
-            <MapPin size={20} />
             Pick Location from Map
-          </button>
+          </Button>
         )}
 
         {/* Recommended */}
@@ -167,21 +136,14 @@ export default function CollegeForm({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex-1 bg-green-600 text-white py-3 rounded-lg"
-          >
-            {loading ? "Saving..." : "Save College"}
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            className="flex-1 bg-gray-200 py-3 rounded-lg"
-          >
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Button type="submit" loading={loading} fullWidth>
+            Save College
+          </Button>
+
+          <Button type="button" variant="secondary" onClick={onCancel} fullWidth>
             Cancel
-          </button>
+          </Button>
         </div>
       </form>
 
