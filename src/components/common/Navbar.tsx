@@ -54,7 +54,7 @@ function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8 me-20">
-          {["About", "Admission", "Contact", "Hostels"].map((item) => (
+          {["About", "Admission", "Contact", "Admin"].map((item) => (
             <a
               key={item}
               href={
