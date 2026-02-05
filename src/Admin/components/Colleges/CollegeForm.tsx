@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  MapPin,
+  CheckCircle,
+  Building2,
+  Sparkles,
+  Link as LinkIcon,
+} from "lucide-react";
 import LocationModal from "./LocationModal";
-import { MapPin, CheckCircle } from "lucide-react";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import {
-  College,
   CollegeCreateDTO,
   CollegeUpdateDTO,
+  CollegeResponseDTO,
+  AddonResponseDTO,
 } from "../../../types";
 
 interface Props {
-  college?: College; // Proper type instead of any
+  college?: CollegeResponseDTO;
+  addons: AddonResponseDTO[];
   onSubmit: (data: CollegeCreateDTO | CollegeUpdateDTO) => void;
   onCancel: () => void;
   loading?: boolean;
@@ -18,185 +26,194 @@ interface Props {
 
 export default function CollegeForm({
   college,
+  addons,
   onSubmit,
   onCancel,
   loading,
 }: Props) {
-  const [name, setName] = useState(college?.name || "");
-  const [address, setAddress] = useState(college?.address || "");
-  const [latitude, setLatitude] = useState<number | null>(
-    college?.latitude ?? null
-  );
-  const [longitude, setLongitude] = useState<number | null>(
-    college?.longitude ?? null
-  );
-  const [googleMapsUrl, setGoogleMapsUrl] = useState<string>(
-    college?.googleMapsUrl || ""
-  );
-  const [isRecommended, setIsRecommended] = useState<boolean>(
-    college?.isRecommended ?? false
-  );
+  const [form, setForm] = useState({
+    name: "",
+    city: "",
+    googleMapsUrl: "",
+    isRecommended: false,
+  });
+
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+  const [selectedAddonIds, setSelectedAddonIds] = useState<number[]>([]);
   const [openMap, setOpenMap] = useState(false);
 
-  // Extract lat/lng from multiple Google Maps URL formats
-  const extractLatLngFromGoogleUrl = (url: string) => {
-    try {
-      let match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-      if (match) {
-        setLatitude(Number(match[1]));
-        setLongitude(Number(match[2]));
-        return;
-      }
+  // Prefill on edit
+  useEffect(() => {
+    if (!college) return;
+    setForm({
+      name: college.name,
+      city: college.address,
+      googleMapsUrl: college.googleMapsUrl || "",
+      isRecommended: college.isRecommended,
+    });
+    setLatitude(college.latitude ?? null);
+    setLongitude(college.longitude ?? null);
 
-      match = url.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
-      if (match) {
-        setLatitude(Number(match[1]));
-        setLongitude(Number(match[2]));
-        return;
-      }
-
-      match = url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
-      if (match) {
-        setLatitude(Number(match[1]));
-        setLongitude(Number(match[2]));
-      }
-    } catch {
-      console.warn("Could not extract coordinates");
+    if (college.addons) {
+      setSelectedAddonIds(
+        addons
+          .filter(a => college.addons.includes(a.name))
+          .map(a => a.id)
+      );
     }
-  };
+  }, [college, addons]);
 
-  const clearLocation = () => {
-    setLatitude(null);
-    setLongitude(null);
-    setGoogleMapsUrl("");
-    setOpenMap(false);
-  };
+  const toggleAddon = (id: number) =>
+    setSelectedAddonIds(prev =>
+      prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
+    );
+
+  const handleChange = (key: string, value: any) =>
+    setForm(prev => ({ ...prev, [key]: value }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const basePayload: CollegeCreateDTO = {
-      name: name.trim(),
-      address: address.trim(),
-      isRecommended,
-      addonIds: college?.addons?.map((a) => a.id) ?? [],
+    const payload: CollegeCreateDTO = {
+      name: form.name,
+      address: form.city,
+      googleMapsUrl: form.googleMapsUrl || undefined,
+      latitude: latitude ?? undefined,
+      longitude: longitude ?? undefined,
+      isRecommended: form.isRecommended,
+      addonIds: selectedAddonIds,
     };
 
-    if (latitude !== null && longitude !== null) {
-      basePayload.latitude = latitude;
-      basePayload.longitude = longitude;
-    }
-
-    if (googleMapsUrl) basePayload.googleMapsUrl = googleMapsUrl;
-
-    // If editing, send UpdateDTO
-    if (college?.id) {
-      const updatePayload: CollegeUpdateDTO = {
-        ...basePayload,
-        id: college.id,
-      };
-      onSubmit(updatePayload);
-    } else {
-      onSubmit(basePayload);
-    }
+    college?.id ? onSubmit({ ...payload, id: college.id }) : onSubmit(payload);
   };
 
-  const hasLocation = latitude !== null && longitude !== null;
+  const clearLocation = () => {
+  setLatitude(null);
+  setLongitude(null);
+  setForm(prev => ({ ...prev, googleMapsUrl: "" }));
+};
+
+
+  const hasLocation = latitude && longitude;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 max-w-lg mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-center">
-        {college ? "Edit College" : "Add New College"}
-      </h2>
-
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* College Name */}
+    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6 pe-10">
+      {/* BASIC INFO */}
+      <div className="grid sm:grid-cols-2 md:grid-cols-1
+       gap-4">
         <Input
           label="College Name"
-          placeholder="Enter college name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={form.name}
+          onChange={e => handleChange("name", e.target.value)}
           required
         />
-
-        {/* City Name */}
         <Input
           label="City"
-          placeholder="Enter city"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          value={form.city}
+          onChange={e => handleChange("city", e.target.value)}
           required
         />
+      </div>
 
-        {/* Google Maps URL */}
-        <Input
-          label="Google Maps Link (optional)"
-          placeholder="Paste Google Maps URL"
-          value={googleMapsUrl}
-          onChange={(e) => {
-            const url = e.target.value;
-            setGoogleMapsUrl(url);
-            extractLatLngFromGoogleUrl(url);
-          }}
+      {/* LOCATION */}
+<div className="space-y-3">
+  <Input
+    label="Google Maps Link"
+    value={form.googleMapsUrl}
+    onChange={e => handleChange("googleMapsUrl", e.target.value)}
+    placeholder="Paste maps link (optional)"
+  />
+
+  <Button
+    type="button"
+    variant="primary"
+    icon={MapPin}
+    fullWidth
+    onClick={() => setOpenMap(true)}
+  >
+    {hasLocation ? "Change Location" : "Pick from Map"}
+  </Button>
+
+  {hasLocation && (
+    <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-3 py-2 text-sm">
+      <div className="flex items-center gap-2 text-green-700 font-medium">
+        <CheckCircle className="w-4 h-4" />
+        <span>
+          {latitude?.toFixed(5)}, {longitude?.toFixed(5)}
+        </span>
+      </div>
+
+      <Button
+        variant="bordered"
+        onClick={clearLocation}
+        
+      >
+        Clear
+      </Button>
+    </div>
+  )}
+</div>
+
+
+      {/* RECOMMENDED */}
+      <label className="flex items-center gap-3 p-3 rounded-lg border cursor-pointer hover:bg-amber-50">
+        <input
+          type="checkbox"
+          checked={form.isRecommended}
+          onChange={e => handleChange("isRecommended", e.target.checked)}
+          className="w-4 h-4"
         />
+        <span className="flex items-center gap-2 text-sm font-medium">
+          <Sparkles className="w-4 h-4 text-amber-500" />
+          Mark as Recommended
+        </span>
+      </label>
 
-        {/* Location Status */}
-        {hasLocation ? (
-          <div className="flex items-center justify-between bg-green-50 border border-green-200 p-3 rounded-lg">
-            <div className="flex items-center gap-2 text-green-700">
-              <CheckCircle size={18} />
-              <span className="font-medium">
-                Location selected ({latitude?.toFixed(4)},{" "}
-                {longitude?.toFixed(4)})
-              </span>
-            </div>
-
-            <Button type="button" variant="ghost" size="sm" onClick={clearLocation}>
-              Clear
-            </Button>
-          </div>
-        ) : (
-          <Button
-            type="button"
-            onClick={() => setOpenMap(true)}
-            icon={MapPin}
-            fullWidth
-          >
-            Pick Location from Map
-          </Button>
-        )}
-
-        {/* Recommended */}
-        <div className="flex items-center gap-3">
-          <input
-            id="recommended"
-            type="checkbox"
-            checked={isRecommended}
-            onChange={(e) => setIsRecommended(e.target.checked)}
-          />
-          <label htmlFor="recommended" className="font-medium cursor-pointer">
-            Recommended
+      {/* ADDONS */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <label className="font-semibold flex items-center gap-2">
+            <LinkIcon className="w-4 h-4 text-purple-600" />
+            Addons
           </label>
+          <span className="text-xs text-gray-500">
+            {selectedAddonIds.length} selected
+          </span>
         </div>
 
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Button
-            type="submit"
-            loading={loading}
-            fullWidth
-            disabled={!name.trim() || !address.trim()}
-          >
-            Save College
-          </Button>
-
-          <Button type="button" variant="secondary" onClick={onCancel} fullWidth>
-            Cancel
-          </Button>
+        <div className="grid sm:grid-cols-2 gap-2">
+          {addons.map(addon => {
+            const active = selectedAddonIds.includes(addon.id);
+            return (
+              <div
+                key={addon.id}
+                onClick={() => toggleAddon(addon.id)}
+                className={`p-3 border rounded-lg cursor-pointer transition ${active
+                    ? "border-blue-500 bg-blue-100"
+                    : "border-gray-200 hover:border-blue-300"
+                  }`}
+              >
+                <div className="font-medium text-sm">{addon.name}</div>
+                <div className="text-xs text-gray-500">{addon.courseName}</div>
+              </div>
+            );
+          })}
         </div>
-      </form>
+      </div>
 
-      {/* Map Modal */}
+
+      {/* ACTIONS */}
+      <div className="flex gap-3 pt-2">
+        <Button type="submit" loading={loading} className="flex-1">
+          {college ? "Update College" : "Create College"}
+        </Button>
+        <Button type="button" variant="secondary" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
+
+      {/* MAP MODAL */}
       {openMap && (
         <LocationModal
           isOpen={openMap}
@@ -209,6 +226,6 @@ export default function CollegeForm({
           }}
         />
       )}
-    </div>
+    </form>
   );
 }

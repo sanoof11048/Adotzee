@@ -72,7 +72,7 @@ export interface CollegeUpdateDTO extends CollegeCreateDTO {
 
 export interface CollegeResponseDTO extends CollegeCreateDTO {
   id: number;
-  addons: string[]; // Names of associated addons
+  addons: string[]
 }
 
 /** ========================= ADDON TYPES ========================= */

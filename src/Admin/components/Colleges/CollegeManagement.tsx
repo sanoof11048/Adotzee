@@ -5,12 +5,13 @@ import Modal from '../UI/Modal';
 import CollegeForm from './CollegeForm';
 import toast from 'react-hot-toast';
 import Swal from "sweetalert2";
-import { CollegeCreateDTO, CollegeResponseDTO, CollegeUpdateDTO } from '../../../types';
+import { AddonResponseDTO, CollegeCreateDTO, CollegeResponseDTO, CollegeUpdateDTO } from '../../../types';
 import LinearLoading from '../../../components/common/LinearLoading';
 import Button from '../UI/Button';
 
 const CollegeManagement: React.FC = () => {
   const [colleges, setColleges] = useState<CollegeResponseDTO[]>([]);
+  const [addons, setAddons] = useState<AddonResponseDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +20,8 @@ const CollegeManagement: React.FC = () => {
 
   useEffect(() => {
     fetchColleges();
+    fetchAddons();
+    console.log(colleges)
   }, []);
 
   const fetchColleges = async () => {
@@ -26,45 +29,36 @@ const CollegeManagement: React.FC = () => {
       setLoading(true);
       const res = await apiService.getColleges();
       setColleges(res.data.data || []);
+      console.log(res.data.data)
     } catch (err) {
       toast.error('Failed to fetch colleges.');
       console.error(err);
     } finally {
       setLoading(false);
+      console.log(colleges)
     }
   };
 
-
-
-  const handleCreateCollege = async (data: CollegeCreateDTO) => {
+const fetchAddons = async () => {
     try {
-      setSubmitting(true);
-      console.log(data)
-      const res = await apiService.createCollege(data);
-      console.log(res)
-      toast.success('College created successfully');
-      await fetchColleges();
-      closeModal();
-    } catch (err) {
-      toast.error('Error creating college.');
-      console.error(err);
-    } finally {
-      setSubmitting(false);
+      const res = await apiService.getAddons();
+      setAddons(res.data.data || []);
+    } catch {
+      toast.error("Failed to fetch addons");
     }
   };
 
-  const handleUpdateCollege = async (data: CollegeUpdateDTO) => {
+  const handleSubmit = async (data: CollegeCreateDTO | CollegeUpdateDTO) => {
     try {
       setSubmitting(true);
-      console.log(data)
-      const res = await apiService.updateCollege(data);
-      console.log(res)
-      toast.success('College updated successfully');
-      await fetchColleges();
+      if ("id" in data) await apiService.updateCollege(data);
+      else await apiService.createCollege(data);
+
+      toast.success("College saved successfully");
+      fetchColleges();
       closeModal();
-    } catch (err) {
-      toast.error('Error updating college.');
-      console.error(err);
+    } catch {
+      toast.error("Error saving college");
     } finally {
       setSubmitting(false);
     }
@@ -94,17 +88,6 @@ const CollegeManagement: React.FC = () => {
         console.error(err);
         Swal.fire('Error', 'Failed to delete the college.', 'error');
       }
-    }
-  };
-
-  const handleSubmit = async (data: CollegeCreateDTO | CollegeUpdateDTO) => {
-    if ('id' in data) {
-      // CollegeUpdateDTO
-      await handleUpdateCollege(data);
-    } else {
-      // CollegeCreateDTO
-      await handleCreateCollege(data);
-
     }
   };
 
@@ -221,14 +204,14 @@ const CollegeManagement: React.FC = () => {
       )}
 
       {/* College Modal */}
-      <Modal
+       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title={editingCollege ? 'Edit College' : 'Add New College'}
-        size="lg"
+        title={editingCollege ? "Edit College" : "Add College"}
       >
         <CollegeForm
           college={editingCollege || undefined}
+          addons={addons}
           onSubmit={handleSubmit}
           onCancel={closeModal}
           loading={submitting}
