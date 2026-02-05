@@ -82,7 +82,7 @@ function Navbar() {
               <button onClick={toggleMenu} className="self-end text-2xl mb-5 bg-transparent">
               <i className="fa-solid fa-xmark"></i>
               </button>
-              {["Home", "About", "Admission", "Contact", "Hostels"].map((item) => (
+              {["Home", "About", "Admission", "Contact", "Explore"].map((item) => (
                 <a
                   key={item}
                   href={

@@ -1,5 +1,5 @@
 import { Skeleton } from '@mui/material';
-import React, { lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 const FooterLogo = lazy(() => import("../LazyImages/FooterLogo"));
 
 function Footer() {
@@ -58,7 +58,7 @@ function Footer() {
         </a>
       </div>
       <div className="relative bottom-0 left-5 pb-2 text-xs text-gray-500">
-        
+
         <div className="flex items-center space-x-1">
           <span>v1.2.5</span>
           <span>•</span>

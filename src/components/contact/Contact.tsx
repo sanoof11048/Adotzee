@@ -1,4 +1,3 @@
-import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
@@ -157,7 +156,7 @@ export default function Contact() {
               ${formik.isValid && formik.dirty ? 
                 "bg-blue-500 text-gray-300 hover:bg-blue-600" : 
                 "bg-blue-200 text-gray-500 cursor-not-allowed"}`}
-            disabled={!(formik.isValid && formik.dirty)} // Disable the button if form is invalid or unchanged
+            disabled={!(formik.isValid && formik.dirty)}
           >
             Send message
           </button>
