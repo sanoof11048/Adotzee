@@ -2,11 +2,16 @@ import { useState } from "react";
 import LocationModal from "./LocationModal";
 import { MapPin, CheckCircle } from "lucide-react";
 import Button from "../UI/Button";
-import Input from "../UI/Input"; // <-- custom input
+import Input from "../UI/Input";
+import {
+  College,
+  CollegeCreateDTO,
+  CollegeUpdateDTO,
+} from "../../../types";
 
 interface Props {
-  college?: any;
-  onSubmit: (data: any) => void;
+  college?: College; // Proper type instead of any
+  onSubmit: (data: CollegeCreateDTO | CollegeUpdateDTO) => void;
   onCancel: () => void;
   loading?: boolean;
 }
@@ -19,48 +24,81 @@ export default function CollegeForm({
 }: Props) {
   const [name, setName] = useState(college?.name || "");
   const [address, setAddress] = useState(college?.address || "");
-  const [latitude, setLatitude] = useState<number | null>(college?.latitude ?? null);
-  const [longitude, setLongitude] = useState<number | null>(college?.longitude ?? null);
-  const [googleMapsUrl, setGoogleMapsUrl] = useState<string>(college?.googleMapsUrl || "");
-  const [isRecommended, setIsRecommended] = useState<boolean>(college?.isRecommended ?? false);
+  const [latitude, setLatitude] = useState<number | null>(
+    college?.latitude ?? null
+  );
+  const [longitude, setLongitude] = useState<number | null>(
+    college?.longitude ?? null
+  );
+  const [googleMapsUrl, setGoogleMapsUrl] = useState<string>(
+    college?.googleMapsUrl || ""
+  );
+  const [isRecommended, setIsRecommended] = useState<boolean>(
+    college?.isRecommended ?? false
+  );
   const [openMap, setOpenMap] = useState(false);
 
+  // Extract lat/lng from multiple Google Maps URL formats
   const extractLatLngFromGoogleUrl = (url: string) => {
-    const match =
-      url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) ||
-      url.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+    try {
+      let match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+      if (match) {
+        setLatitude(Number(match[1]));
+        setLongitude(Number(match[2]));
+        return;
+      }
 
-    if (!match) return;
+      match = url.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+      if (match) {
+        setLatitude(Number(match[1]));
+        setLongitude(Number(match[2]));
+        return;
+      }
 
-    setLatitude(Number(match[1]));
-    setLongitude(Number(match[2]));
+      match = url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+      if (match) {
+        setLatitude(Number(match[1]));
+        setLongitude(Number(match[2]));
+      }
+    } catch {
+      console.warn("Could not extract coordinates");
+    }
   };
 
   const clearLocation = () => {
     setLatitude(null);
     setLongitude(null);
     setGoogleMapsUrl("");
+    setOpenMap(false);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload: any = {
-      name,
-      address,
+    const basePayload: CollegeCreateDTO = {
+      name: name.trim(),
+      address: address.trim(),
       isRecommended,
-      addonIds: [],
+      addonIds: college?.addons?.map((a) => a.id) ?? [],
     };
 
     if (latitude !== null && longitude !== null) {
-      payload.latitude = latitude;
-      payload.longitude = longitude;
+      basePayload.latitude = latitude;
+      basePayload.longitude = longitude;
     }
 
-    if (googleMapsUrl) payload.googleMapsUrl = googleMapsUrl;
-    if (college?.id) payload.id = college.id;
+    if (googleMapsUrl) basePayload.googleMapsUrl = googleMapsUrl;
 
-    onSubmit(payload);
+    // If editing, send UpdateDTO
+    if (college?.id) {
+      const updatePayload: CollegeUpdateDTO = {
+        ...basePayload,
+        id: college.id,
+      };
+      onSubmit(updatePayload);
+    } else {
+      onSubmit(basePayload);
+    }
   };
 
   const hasLocation = latitude !== null && longitude !== null;
@@ -71,7 +109,7 @@ export default function CollegeForm({
         {college ? "Edit College" : "Add New College"}
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-5 pe-10">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* College Name */}
         <Input
           label="College Name"
@@ -81,14 +119,13 @@ export default function CollegeForm({
           required
         />
 
-        {/* Address */}
+        {/* City Name */}
         <Input
-          label="Address"
-          placeholder="Enter address"
+          label="City"
+          placeholder="Enter city"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           required
-          className="h-20"
         />
 
         {/* Google Maps URL */}
@@ -97,8 +134,9 @@ export default function CollegeForm({
           placeholder="Paste Google Maps URL"
           value={googleMapsUrl}
           onChange={(e) => {
-            setGoogleMapsUrl(e.target.value);
-            extractLatLngFromGoogleUrl(e.target.value);
+            const url = e.target.value;
+            setGoogleMapsUrl(url);
+            extractLatLngFromGoogleUrl(url);
           }}
         />
 
@@ -107,10 +145,13 @@ export default function CollegeForm({
           <div className="flex items-center justify-between bg-green-50 border border-green-200 p-3 rounded-lg">
             <div className="flex items-center gap-2 text-green-700">
               <CheckCircle size={18} />
-              <span className="font-medium">Location picked from map</span>
+              <span className="font-medium">
+                Location selected ({latitude?.toFixed(4)},{" "}
+                {longitude?.toFixed(4)})
+              </span>
             </div>
 
-            <Button variant="ghost" size="sm" onClick={clearLocation}>
+            <Button type="button" variant="ghost" size="sm" onClick={clearLocation}>
               Clear
             </Button>
           </div>
@@ -128,16 +169,24 @@ export default function CollegeForm({
         {/* Recommended */}
         <div className="flex items-center gap-3">
           <input
+            id="recommended"
             type="checkbox"
             checked={isRecommended}
             onChange={(e) => setIsRecommended(e.target.checked)}
           />
-          <label className="font-medium">Recommended</label>
+          <label htmlFor="recommended" className="font-medium cursor-pointer">
+            Recommended
+          </label>
         </div>
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button type="submit" loading={loading} fullWidth>
+          <Button
+            type="submit"
+            loading={loading}
+            fullWidth
+            disabled={!name.trim() || !address.trim()}
+          >
             Save College
           </Button>
 
