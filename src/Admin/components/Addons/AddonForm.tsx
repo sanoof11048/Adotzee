@@ -115,7 +115,7 @@ const AddonForm: React.FC<Props> = ({ addon, onSubmit, onCancel, loading }) => {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 pe-10">
+    <form onSubmit={handleSubmit} className="space-y-6 pe-10 ">
       {/* Addon Name */}
       <Input
         label="Addon Name *"
@@ -193,7 +193,7 @@ const AddonForm: React.FC<Props> = ({ addon, onSubmit, onCancel, loading }) => {
         />
 
         {showCollegeDropdown && filteredColleges.length > 0 && (
-          <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-xl mt-1 max-h-52 overflow-y-auto shadow-lg">
+          <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-xl mt-1 max-h-42 pe-10 overflow-y-auto shadow-lg">
             {filteredColleges.map((c) => (
               <div
                 key={c.id}
@@ -218,7 +218,7 @@ const AddonForm: React.FC<Props> = ({ addon, onSubmit, onCancel, loading }) => {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end gap-3 pt-4 border-t">
+      <div className="flex justify-end gap-3 pt-22 border-t">
         <Button variant="outline" onClick={handleCancel}>
           Cancel
         </Button>
